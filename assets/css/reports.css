@@ -1,0 +1,146 @@
+/* reports.css - Optimized for Elite ERP Theme & Advanced Generator */
+
+#emailReportSection.card {
+    border: none;
+    background: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+#emailReportSection.card:hover {
+    transform: translateY(-5px);
+}
+
+#emailReportSection .card-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem;
+}
+
+#emailReportSection .form-select:focus,
+#emailReportSection .form-control:focus {
+    box-shadow: none;
+    background-color: #f1f5f9 !important;
+    border: 1px solid var(--secondary) !important;
+}
+
+/* Side Tools Panel Styling */
+.card-header h6 {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+    color: var(--primary);
+}
+
+.input-group .btn {
+    border-radius: 0 8px 8px 0;
+}
+
+.input-group .form-control {
+    border-radius: 8px 0 0 8px;
+}
+
+.btn-icon-only {
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.extra-small {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+.text-mutedSmall {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Custom Filter Styles */
+.form-select.bg-light,
+.form-control.bg-light {
+    border: 1px solid transparent !important;
+    transition: all 0.2s ease;
+}
+
+.form-select.bg-light:focus,
+.form-control.bg-light:focus {
+    background-color: #ffffff !important;
+    border-color: var(--secondary) !important;
+    box-shadow: 0 0 0 3px rgba(8, 100, 207, 0.1) !important;
+}
+
+/* Searchable Dropdown Styling */
+.custom-search-dropdown .btn-light {
+    background-color: #f8fafc;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.custom-search-dropdown .dropdown-menu {
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    margin-top: 5px !important;
+}
+
+.border-bottom-light {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Table Refinements */
+.table thead th {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    padding: 15px 12px;
+    background-color: #f8fafc;
+}
+
+.table tbody td {
+    padding: 14px 12px;
+    font-size: 14px;
+}
+
+/* Status Badges */
+.bg-success-subtle {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+.text-success {
+    color: #10b981 !important;
+}
+
+.bg-danger-subtle {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.text-danger {
+    color: #ef4444 !important;
+}
+
+/* Transitions */
+.btn {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.bg-light {
+    background-color: #f8fafc !important;
+}
+
+/* Upload zone override */
+.form-control[type="file"] {
+    font-size: 14px;
+    padding: 10px;
+}

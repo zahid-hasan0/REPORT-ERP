@@ -1,0 +1,1018 @@
+﻿<!-- pages/settings.html -->
+<style>
+    /* Professional ERP Settings Layout */
+    .pro-settings-layout {
+        display: flex;
+        height: 100%;
+        background-color: #f8fafc;
+        /* Slate-50 */
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* 1. Dark Sidebar - Modern & Floating Feel */
+    .pro-settings-sidebar {
+        width: 280px;
+        min-width: 280px;
+        background: #ffffff;
+        border-right: 1px solid #f1f5f9;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1rem;
+        z-index: 10;
+    }
+
+    .sidebar-header {
+        padding: 0 1rem 1.5rem 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar-header h4 {
+        color: #0f172a;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .nav-group-title {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+        margin: 1.5rem 0 0.75rem 0;
+        padding-left: 1rem;
+    }
+
+    .pro-nav-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.25rem;
+        color: #64748b;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .pro-nav-item:hover {
+        background: #f8fafc;
+        color: #334155;
+    }
+
+    .pro-nav-item.active {
+        background: #eff6ff;
+        color: #2563eb;
+        font-weight: 600;
+    }
+
+    .pro-nav-item i {
+        width: 20px;
+        margin-right: 12px;
+        font-size: 1rem;
+        opacity: 0.9;
+        text-align: center;
+    }
+
+    /* 2. Content Area - Clean & Spacious */
+    .pro-settings-content {
+        flex: 1;
+        padding: 3rem 4rem;
+        overflow-y: auto;
+        background-color: #fcfcfc;
+    }
+
+    .settings-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .settings-header h2 {
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 0.5rem;
+        letter-spacing: -1px;
+        font-size: 1.75rem;
+    }
+
+    .settings-header p {
+        font-size: 1rem;
+    }
+
+
+    .pro-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f1f5f9;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .pro-card-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+    }
+
+    .pro-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #0f172a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pro-card-body {
+        padding: 2rem;
+    }
+
+    /* Form Elements Override */
+    .form-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control,
+    .form-select {
+        border-color: #cbd5e1;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Table Styles */
+    .pro-table thead th {
+        background: #f8fafc;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .pro-table tbody td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-size: 0.95rem;
+    }
+
+    .avatar-initial {
+        width: 36px;
+        height: 36px;
+        background-color: #eff6ff;
+        color: #2563eb;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        margin-right: 12px;
+    }
+
+    /* User Grid Layout */
+    .user-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .user-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: #cbd5e1;
+    }
+
+    .user-avatar-lg {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        background-color: #f1f5f9;
+        color: #334155;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 4px solid white;
+    }
+
+    .user-card h5 {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 0.25rem;
+    }
+
+    .user-username {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        background: #f8fafc;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid #f1f5f9;
+    }
+
+    .user-role-badge {
+        display: none !important;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .role-admin {
+        background: #0f172a;
+        color: #fbbf24;
+        /* Amber-400 text for contrast */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .role-user {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .user-actions {
+        margin-top: auto;
+        width: 100%;
+        padding-top: 1rem;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        gap: 10px;
+    }
+
+    /* Terminal/Console Viewer */
+    .terminal-window {
+        background: #1e1e1e;
+        /* VS Code Dark */
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: 1px solid #333;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    .terminal-header {
+        background: #252526;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #333;
+    }
+
+    .terminal-dots {
+        display: flex;
+        gap: 6px;
+        margin-right: 16px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .dot-red {
+        background: #ff5f56;
+    }
+
+    .dot-yellow {
+        background: #ffbd2e;
+    }
+
+    .dot-green {
+        background: #27c93f;
+    }
+
+    .terminal-title {
+        color: #8b949e;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .terminal-body {
+        height: 600px;
+        overflow-y: auto;
+        padding: 1rem;
+        color: #d4d4d4;
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+
+    .log-line {
+        display: flex;
+        gap: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 2px 0;
+    }
+
+    .log-ts {
+        color: #569cd6;
+        min-width: 80px;
+        opacity: 0.7;
+    }
+
+    .log-content {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .log-content.warn {
+        color: #dcdcaa;
+    }
+
+    .log-content.error {
+        color: #f48771;
+    }
+
+    /* Scrollbar */
+    .terminal-body::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .terminal-body::-webkit-scrollbar-track {
+        background: #1e1e1e;
+    }
+
+    .terminal-body::-webkit-scrollbar-thumb {
+        background: #424242;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="pro-settings-layout">
+    <!-- Dark Sidebar -->
+    <div class="pro-settings-sidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-cogs me-2"></i>Settings</h4>
+        </div>
+
+        <div class="nav-group-title">Administration</div>
+        <button class="pro-nav-item active settings-nav-item" data-tab="user-management">
+            <i class="fas fa-users-cog"></i> Users & Roles
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="general-settings">
+            <i class="fas fa-sliders-h"></i> Configuration
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="approval-center">
+            <i class="fas fa-check-double text-warning"></i> Deletion Approvals
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="dashboard-settings">
+            <i class="fas fa-chart-pie"></i> Dashboard
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="theme-settings">
+            <i class="fas fa-palette"></i> Theme Colors
+        </button>
+
+        <button class="pro-nav-item settings-nav-item" data-tab="whatsapp-settings">
+            <i class="fab fa-whatsapp"></i> WhatsApp API
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="template-settings">
+            <i class="fas fa-comment-dots"></i> Message Templates
+        </button>
+        <button class="pro-nav-item settings-nav-item" data-tab="email-settings">
+            <i class="fas fa-envelope-open-text"></i> Email Reporting
+        </button>
+
+        <div class="nav-group-title mt-4">Account</div>
+        <button class="pro-nav-item settings-nav-item" data-tab="profile-settings">
+            <i class="fas fa-user-circle"></i> My Profile
+        </button>
+
+        <div class="mt-auto pt-4 border-top border-secondary">
+            <button class="pro-nav-item settings-nav-item text-warning" data-tab="system-status">
+                <i class="fas fa-terminal"></i> System Logs
+            </button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="pro-settings-content">
+
+        <!-- User Management -->
+        <div id="user-management" class="settings-section">
+            <div class="settings-header">
+                <h2>User Management</h2>
+                <p class="text-muted">Manage system access and permissions for your team.</p>
+            </div>
+
+            <div class="d-flex justify-content-end mb-4">
+                <button class="btn btn-primary" onclick="loadUserList()"><i class="fas fa-sync me-2"></i>Sync
+                    List</button>
+            </div>
+
+            <div class="pro-card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table pro-table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">User Identity</th>
+                                <th>Role & Permissions</th>
+                                <th>Access Level</th>
+                                <th>Last Active</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListContainer">
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fas fa-spinner fa-spin me-2"></i> Loading users...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Settings -->
+        <div id="general-settings" class="settings-section d-none">
+            <!-- ... content ... -->
+        </div>
+
+        <!-- Approval Center -->
+        <div id="approval-center" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Approval Center</h2>
+                <p class="text-muted">Review and process deletion requests from system modules.</p>
+            </div>
+
+            <div class="pro-card border-0 shadow-sm">
+                <div class="pro-card-header">
+                    <h5 class="pro-card-title"><i class="fas fa-trash-restore text-warning"></i> Pending Deletions</h5>
+                    <button class="btn btn-sm btn-outline-primary" onclick="loadDeleteRequests()"><i
+                            class="fas fa-sync me-1"></i> Refresh</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table pro-table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Buyer/Item</th>
+                                <th>Reason/Comments</th>
+                                <th>Requested By</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deleteRequestsContainer">
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fas fa-check-circle fa-3x mb-3 d-block opacity-25"></i>
+                                    No pending deletion requests.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Settings -->
+        <div id="whatsapp-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>WhatsApp Integration</h2>
+                <p class="text-muted">Manage contact lists for automated reporting.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="pro-card h-100">
+                        <div class="pro-card-header">
+                            <h5 class="pro-card-title">Job Contacts</h5>
+                            <button class="btn btn-sm btn-light border" onclick="addWhatsAppContact('individual')"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table pro-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Name</th>
+                                        <th class="text-end pe-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="waIndividualBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="pro-card h-100">
+                        <div class="pro-card-header">
+                            <h5 class="pro-card-title">Report Contacts</h5>
+                            <button class="btn btn-sm btn-light border" onclick="addWhatsAppContact('full_report')"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table pro-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Name</th>
+                                        <th class="text-end pe-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="waFullBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Templates Tab -->
+        <div id="template-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Message Templates</h2>
+                <p class="text-muted">Customize automated message formats for WhatsApp.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="pro-card h-100 border-0 shadow-sm">
+                        <div class="pro-card-header bg-white border-bottom-0 pt-4 px-4 pb-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="pro-card-title mb-0 fw-bold">EMB - Send Selected</h5>
+                                <span class="badge bg-success-subtle text-success rounded-pill px-3">Active</span>
+                            </div>
+                        </div>
+                        <div class="pro-card-body p-4">
+                            <label class="form-label small fw-bold text-uppercase text-muted mb-2">Message
+                                Format</label>
+                            <div class="position-relative">
+                                <textarea id="template_emb_send_selected"
+                                    class="form-control bg-light border-0 font-monospace p-3"
+                                    style="height: 200px; font-size: 0.85rem; line-height: 1.6;"
+                                    placeholder="Enter your message template here..."></textarea>
+                            </div>
+                            <div class="mt-3 p-3 bg-light rounded text-muted small">
+                                <strong class="d-block mb-2 text-dark">Available Variables:</strong>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{jobNo}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{buyer}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{wo}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{status}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{comments}</span>
+                            </div>
+                            <button class="btn btn-primary w-100 mt-4 py-2 fw-medium"
+                                onclick="saveWhatsAppTemplate('emb_send_selected')">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="pro-card h-100 border-0 shadow-sm">
+                        <div class="pro-card-header bg-white border-bottom-0 pt-4 px-4 pb-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="pro-card-title mb-0 fw-bold">EMB - Full Report</h5>
+                                <span class="badge bg-info-subtle text-info rounded-pill px-3">Active</span>
+                            </div>
+                        </div>
+                        <div class="pro-card-body p-4">
+                            <label class="form-label small fw-bold text-uppercase text-muted mb-2">Message
+                                Format</label>
+                            <div class="position-relative">
+                                <textarea id="template_emb_full_report"
+                                    class="form-control bg-light border-0 font-monospace p-3"
+                                    style="height: 200px; font-size: 0.85rem; line-height: 1.6;"
+                                    placeholder="Enter your message template here..."></textarea>
+                            </div>
+                            <div class="mt-3 p-3 bg-light rounded text-muted small">
+                                <strong class="d-block mb-2 text-dark">Available Variables:</strong>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{date}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{index}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{jobNo}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{buyer}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{wo}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{status}</span>
+                                <span class="badge bg-white border text-secondary me-1 mb-1">{comments}</span>
+                            </div>
+                            <button class="btn btn-primary w-100 mt-4 py-2 fw-medium"
+                                onclick="saveWhatsAppTemplate('emb_full_report')">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Settings -->
+        <div id="email-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Email Reporting</h2>
+                <p class="text-muted">Configure and distribute buyer-wise performance reports.</p>
+            </div>
+
+            <div class="pro-card">
+                <div class="pro-card-header">
+                    <h5 class="pro-card-title">Delivery Configuration</h5>
+                    <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1"
+                        style="font-size: 10px;">EmailJS Service</span>
+                </div>
+                <div class="pro-card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Target Month</label>
+                            <select id="emailMonth" class="form-select bg-light border-0">
+                                <option value="all">All Months</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Target Year</label>
+                            <select id="emailYear" class="form-select bg-light border-0">
+                                <option value="all">All Years</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Provider</label>
+                            <select id="emailService" class="form-select bg-light border-0">
+                                <option value="GMAIL">Google Workspace</option>
+                                <option value="OUTLOOK">Microsoft Outlook</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Recipient Address</label>
+                            <input type="email" class="form-control bg-light border-0" id="recipientEmail"
+                                placeholder="e.g. manager@gms-composite.com">
+                        </div>
+                    </div>
+                </div>
+                <div class="pro-card-footer bg-light p-4 border-top d-flex gap-2">
+                    <button class="btn btn-primary px-5 py-2 fw-bold" id="sendEmailBtn"
+                        onclick="sendEmailWithFilter()">Transmit Report</button>
+                    <button class="btn btn-outline-secondary px-4 py-2" onclick="downloadWithFilter()">Download
+                        HTML</button>
+                </div>
+            </div>
+        </div>
+        <div id="dashboard-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Dashboard Controls</h2>
+                <p class="text-muted">Configure the default view for the main dashboard.</p>
+            </div>
+
+            <div class="pro-card">
+                <div class="pro-card-header">
+                    <h5 class="pro-card-title">Active Period Configuration</h5>
+                </div>
+                <div class="pro-card-body">
+                    <div class="row g-4">
+                        <div class="col-md-5">
+                            <label class="form-label">Show Month</label>
+                            <select id="activeMonthSelect" class="form-select">
+                                <option value="all">Every Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Show Year</label>
+                            <select id="activeYearSelect" class="form-select">
+                                <option value="all">Every Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" onclick="saveActiveView()">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-card">
+                <div class="pro-card-header">
+                    <h5 class="pro-card-title">Fiscal Years Management</h5>
+                    <button class="btn btn-sm btn-dark" onclick="addNewYear()">Add New Year</button>
+                </div>
+                <div class="pro-card-body">
+                    <div id="yearListContainer" class="d-flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Settings -->
+        <div id="theme-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Theme &amp; Branding</h2>
+                <p class="text-muted">Choose a preset theme or customize with your own colors.</p>
+            </div>
+            <!-- Preset Theme Gallery -->
+            <div class="pro-card mb-4">
+                <div class="pro-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="pro-card-title mb-0"><i class="fas fa-palette me-2 text-primary"></i>Preset Themes</h5>
+                    <span class="text-muted small">Click any theme to instantly apply it</span>
+                </div>
+                <div class="pro-card-body">
+                    <div class="row g-3">
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('rich-indigo')" id="preset-rich-indigo">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#312e81;"></div><div class="preview-body"><div class="preview-topbar" style="background:#1e1b4b;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#312e81;"></span>Rich Indigo</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('royal-teal')" id="preset-royal-teal">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#0f4c75;"></div><div class="preview-body"><div class="preview-topbar" style="background:#082f49;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#0f4c75;"></span>Royal Teal</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('forest-emerald')" id="preset-forest-emerald">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#064e3b;"></div><div class="preview-body"><div class="preview-topbar" style="background:#022c22;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#064e3b;"></span>Forest Emerald</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('deep-crimson')" id="preset-deep-crimson">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#7f1d1d;"></div><div class="preview-body"><div class="preview-topbar" style="background:#450a0a;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#7f1d1d;"></span>Deep Crimson</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('premium-slate')" id="preset-premium-slate">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#1e293b;"></div><div class="preview-body"><div class="preview-topbar" style="background:#0f172a;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#1e293b;"></span>Premium Slate</div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="theme-preset-card" onclick="applyPresetTheme('clean-white')" id="preset-clean-white">
+                                <div class="theme-preview"><div class="preview-sidebar" style="background:#f8fafc; border-right:1px solid #e2e8f0;"></div><div class="preview-body"><div class="preview-topbar" style="background:#f1f5f9;"></div><div class="preview-content"></div></div></div>
+                                <div class="theme-preset-label"><span class="color-dot" style="background:#f8fafc; border:2px solid #cbd5e1;"></span>Clean White</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Custom Color Pickers -->
+            <div class="pro-card">
+                <div class="pro-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="pro-card-title mb-0"><i class="fas fa-sliders-h me-2 text-secondary"></i>Custom Colors</h5>
+                    <span class="text-muted small">Fine-tune your own color combination</span>
+                </div>
+                <div class="pro-card-body">
+                    <div class="row g-4">
+                        <div class="col-md-3"><label class="form-label d-block">Sidebar Background</label><input type="color" id="themeSidebarBg" class="form-control form-control-color border-0 p-1 w-100" style="height: 50px;"></div>
+                        <div class="col-md-3"><label class="form-label d-block">Sidebar Text</label><input type="color" id="themeSidebarText" class="form-control form-control-color border-0 p-1 w-100" style="height: 50px;"></div>
+                        <div class="col-md-3"><label class="form-label d-block">Top Header Background</label><input type="color" id="themeTopbarBg" class="form-control form-control-color border-0 p-1 w-100" style="height: 50px;"></div>
+                        <div class="col-md-3"><label class="form-label d-block">Charts Primary Color</label><input type="color" id="themeChartColor" class="form-control form-control-color border-0 p-1 w-100" style="height: 50px;"></div>
+                        <div class="col-12 d-flex gap-2">
+                            <button class="btn btn-primary px-4" onclick="saveThemeSettings()"><i class="fas fa-save me-2"></i> Save Custom Colors</button>
+                            <button class="btn btn-outline-secondary" onclick="resetThemeSettings()"><i class="fas fa-undo me-2"></i> Factory Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                .theme-preset-card{cursor:pointer;border-radius:12px;border:2px solid #e2e8f0;overflow:hidden;transition:all 0.2s ease;background:#fff;}
+                .theme-preset-card:hover{border-color:#6366f1;transform:translateY(-3px);box-shadow:0 8px 20px rgba(99,102,241,0.2);}
+                .theme-preset-card.active-preset{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.3);}
+                .theme-preview{display:flex;height:70px;}
+                .preview-sidebar{width:32%;}
+                .preview-body{flex:1;display:flex;flex-direction:column;background:#f1f5f9;}
+                .preview-topbar{height:30%;}
+                .preview-content{flex:1;background:#e2e8f0;}
+                .theme-preset-label{padding:6px 10px;font-size:0.8rem;font-weight:600;color:#334155;display:flex;align-items:center;gap:6px;}
+                .color-dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0;}
+            </style>
+        </div>
+
+        <!-- Profile -->
+        <div id="profile-settings" class="settings-section d-none">
+            <div class="settings-header">
+                <h2>Account Profile</h2>
+            </div>
+            <div class="pro-card">
+                <div class="pro-card-body">
+                    <p>Logged in as: <strong id="currentUsernameDisp"></strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div id="system-status" class="settings-section d-none">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="mb-1 text-dark">System Logs & Diagnostics</h2>
+                    <p class="text-muted mb-0">Real-time log capture. Hidden from browser console.</p>
+                </div>
+                <div>
+                    <button class="btn btn-warning" onclick="clearSystemLogs()"><i
+                            class="fas fa-trash-alt me-2"></i>Clear</button>
+                    <button class="btn btn-dark" onclick="refreshSystemLogs()"><i class="fas fa-sync me-2"></i>Poll
+                        Logs</button>
+                </div>
+            </div>
+
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="terminal-title">admin@booking-system:~ (monitoring)</div>
+                </div>
+                <div id="consoleLogViewer" class="terminal-body">
+                    <div class="text-muted opacity-50 text-center mt-5">Initializing Status Monitor...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Unified Modal (Kept same logic structure) -->
+<div class="modal fade" id="userManagementModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h6 class="modal-title fw-bold" id="manageModalTitle">Manage User</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 pt-2">
+                <input type="hidden" id="manageUsernameHidden">
+                <ul class="nav nav-tabs nav-fill mb-4" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active small fw-bold text-uppercase" data-bs-toggle="tab"
+                            data-bs-target="#tab-manage" type="button">Profile</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link small fw-bold text-uppercase" data-bs-toggle="tab"
+                            data-bs-target="#tab-privilege" type="button">Permissions</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab-manage">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold mb-1">Role</label>
+                            <select class="form-select" id="manageRoleSelect">
+                                <option value="user">User</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold mb-1">Default Landing Page</label>
+                            <select class="form-select" id="manageDefaultPage">
+                                <option value="homePage">Home Page (Premium)</option>
+                                <option value="dashboardPage">Dashboard (Standard)</option>
+                                <option value="bookingPage">Bookings</option>
+                                <option value="buyerManagementPage">Buyer Library</option>
+                                <option value="reportPage">Reports Analysis</option>
+                                <option value="embEntryPage">Emb Entry</option>
+                                <option value="embReportPage">Emb Reports</option>
+                                <option value="buyerNotesPage">Buyer Notes</option>
+                                <option value="merchandisingPage">Packing List</option>
+                                <option value="merchandisingBuyersPage">Manage Buyers</option>
+                                <option value="myTasksPage">My Task Planner</option>
+                                <option value="myDiaryPage">Personal Diary</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold mb-1">Default Zoom Level</label>
+                            <select class="form-select" id="manageZoomLevel">
+                                <option value="50">50%</option>
+                                <option value="60">60%</option>
+                                <option value="70">70%</option>
+                                <option value="80">80%</option>
+                                <option value="90">90%</option>
+                                <option value="100" selected>100% (Default)</option>
+                                <option value="110">110%</option>
+                                <option value="120">120%</option>
+                                <option value="130">130%</option>
+                                <option value="140">140%</option>
+                                <option value="150">150%</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold mb-1">Password Check</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="managePasswordInput"
+                                    placeholder="New Password">
+                                <button class="btn btn-outline-secondary" onclick="generateRandomPass()">Gen</button>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-danger fw-bold mb-0">Delete Account</h6>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteUser()">Confirm</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-privilege">
+                        <div class="d-flex flex-column gap-2" id="modulePermissionsContainer">
+                            <!-- Dynamically populated by js/adminSettings.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer py-2 bg-light">
+                <button type="button" class="btn btn-sm btn-white border" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-dark px-3" onclick="saveUserManagement()">Save
+                    Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add WhatsApp Contact Modal -->
+<div class="modal fade" id="addContactModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h6 class="modal-title fw-bold">Add WhatsApp Contact</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" id="addContactTypeHidden">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Contact Name</label>
+                    <input type="text" class="form-control" id="addContactName" placeholder="e.g. John Doe">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold mb-1">Phone Number</label>
+                    <input type="text" class="form-control" id="addContactNumber" placeholder="e.g. 01712345678">
+                </div>
+            </div>
+            <div class="modal-footer py-2 bg-light">
+                <button type="button" class="btn btn-sm btn-white border" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-sm btn-dark px-3" onclick="saveNewContact()">Add Contact</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display:none">
+</div>
+</div>
+</div>
+</div>

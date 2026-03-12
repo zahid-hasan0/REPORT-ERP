@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Portal | GMS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-light: #38bdf8;
+            --accent: #0f172a;
+            --bg-body: #f1f5f9;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --speed: 0.7s;
+            --curve: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+            /* Better Cubic for Snappy feel */
+            --curve-smooth: cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Professional Soft Aurora Background */
+        .bg-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #f8fafc;
+        }
+
+        /* Abstract Aurora Blobs */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: floatAurora var(--dur) ease-in-out infinite alternate;
+        }
+
+        .shape-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            /* Deep Indigo */
+            top: -150px;
+            left: -100px;
+            --dur: 22s;
+        }
+
+        .shape-2 {
+            width: 650px;
+            height: 650px;
+            background: var(--accent);
+            /* Sky Blue */
+            bottom: -200px;
+            right: -100px;
+            --dur: 26s;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 450px;
+            height: 450px;
+            background: var(--primary-light);
+            top: 20%;
+            left: 30%;
+            --dur: 24s;
+            animation-delay: -10s;
+            opacity: 0.3;
+        }
+
+        .shape-4 {
+            width: 500px;
+            height: 500px;
+            background: #38bdf8;
+            bottom: 10%;
+            left: 50%;
+            --dur: 28s;
+            animation-delay: -15s;
+            opacity: 0.2;
+        }
+
+        .shape-5 {
+            display: none;
+            /* Only 4 needed for aurora */
+        }
+
+        @keyframes floatAurora {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(40px, -50px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-30px, 30px) scale(0.95);
+            }
+
+            100% {
+                transform: translate(50px, 40px) scale(1.1);
+            }
+        }
+
+        /* Auth Card */
+        .auth-container {
+            width: 1000px;
+            max-width: 95vw;
+            height: 650px;
+            background: white;
+            border-radius: 35px;
+            box-shadow: 0 40px 100px -25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        /* Moving Overlay container */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform var(--speed) var(--curve-smooth);
+            z-index: 100;
+        }
+
+        .auth-container.is-register .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay-bg {
+            background: radial-gradient(circle at right top, #38bdf8 0%, #0284c7 40%, #082f49 100%);
+            background-size: cover;
+            background-position: 0 0;
+            color: #ffffff;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform var(--speed) var(--curve-smooth);
+            overflow: hidden;
+        }
+
+        /* Premium Overlay Decorations */
+        .overlay-decoration {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .dec-1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            right: -100px;
+        }
+
+        .dec-2 {
+            width: 250px;
+            height: 250px;
+            bottom: -80px;
+            left: -50px;
+        }
+
+        .overlay-title {
+            font-size: 2.8rem;
+            letter-spacing: -1px;
+            font-weight: 800;
+            position: relative;
+            z-index: 20;
+        }
+
+        .overlay-desc {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 85%;
+            position: relative;
+            z-index: 20;
+        }
+
+        .auth-container.is-register .overlay-bg {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform var(--speed) var(--curve-smooth);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .auth-container.is-register .overlay-right {
+            transform: translateX(20%);
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .auth-container.is-register .overlay-left {
+            transform: translateX(0);
+        }
+
+        /* Forms */
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all var(--speed) var(--curve-smooth);
+            width: 50%;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box {
+            left: 0;
+            z-index: 2;
+        }
+
+        .auth-container.is-register .login-box {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .register-box {
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .auth-container.is-register .register-box {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        /* UI Elements */
+        .logo-box {
+            width: 65px;
+            height: 65px;
+            background: #fff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f1f5f9;
+        }
+
+        .title-main {
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        .text-muted-sm {
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            font-size: 0.9rem;
+        }
+
+        .form-label-custom {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 14px 20px;
+            background: #f8fafc;
+            color: var(--text-dark);
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 5px rgba(2, 132, 199, 0.05);
+            outline: none;
+        }
+
+        .btn-action {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-weight: 700;
+            margin-top: 15px;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.2);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 14px 50px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 30;
+        }
+
+        .btn-ghost:hover {
+            background: white;
+            color: #0284c7;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: white;
+        }
+
+        #authLoader {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .overlay-container {
+                display: none;
+            }
+
+            .form-container {
+                width: 100%;
+            }
+
+            .auth-container.is-register .login-box {
+                display: none;
+            }
+
+            .auth-container.is-register .register-box {
+                transform: none;
+                left: 0;
+            }
+
+            .auth-container {
+                height: auto;
+                min-height: 500px;
+                padding-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-canvas">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <div class="auth-container" id="authContainer">
+        <!-- Forms View -->
+        <div class="form-container login-box">
+            <div class="text-center">
+                <div class="logo-box">
+                    <img src="../gms icon.png" alt="GMS" width="40">
+                </div>
+                <h2 class="title-main">Login to REPORT ERP</h2>
+                <p class="text-muted-sm">Managed by GMS MIS</p>
+            </div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label-custom">Username</label>
+                    <input type="text" class="form-control" id="u_name" placeholder="admin_gms" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label-custom">Security Password</label>
+                    <input type="password" class="form-control" id="p_word" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-action">SIGN IN</button>
+                <div class="text-center mt-4 d-md-none">
+                    <p class="text-muted">No account? <a href="#" onclick="toggleView(true)"
+                            class="text-primary fw-bold">Register</a></p>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-container register-box">
+            <div class="text-center">
+                <div class="logo-box">
+                    <img src="../gms icon.png" alt="GMS" width="40">
+                </div>
+                <h2 class="title-main">Create Account</h2>
+                <p class="text-muted-sm">Managed by GMS MIS</p>
+            </div>
+            <form id="registerForm">
+                <div class="mb-3">
+                    <label class="form-label-custom">Full Name</label>
+                    <input type="text" class="form-control" id="r_full" placeholder="John Doe" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label-custom">Username</label>
+                    <input type="text" class="form-control" id="r_user" placeholder="johndoe123" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label-custom">Password</label>
+                    <input type="password" class="form-control" id="r_pass" placeholder="••••••••" required
+                        minlength="6">
+                </div>
+                <button type="submit" class="btn btn-action"
+                    style="background: linear-gradient(to right, var(--accent), var(--primary))">SIGN UP</button>
+                <div class="text-center mt-3 d-md-none">
+                    <p class="text-muted">Have account? <a href="#" onclick="toggleView(false)"
+                            class="text-primary fw-bold">Login</a></p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sliding Overlay Sidebar -->
+        <div class="overlay-container">
+            <div class="overlay-bg">
+                <div class="overlay-decoration dec-1"></div>
+                <div class="overlay-decoration dec-2"></div>
+
+                <div class="overlay-panel overlay-left">
+                    <h1 class="overlay-title mb-3">Welcome Back!</h1>
+                    <p class="overlay-desc mb-4">Access your dashboard to effortlessly track and manage your daily
+                        reports and tasks.</p>
+                    <button class="btn-ghost" onclick="toggleView(false)">SIGN IN</button>
+                    <div class="mt-4 fw-medium" style="font-size: 0.85rem; opacity: 0.6; letter-spacing: 0.5px;">
+                        Developed by GMS MIS Zahid</div>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1 class="overlay-title mb-3">New Here?</h1>
+                    <p class="overlay-desc mb-4">Securely store, track, and manage all your daily work data and reports
+                        in one place.</p>
+                    <button class="btn-ghost" onclick="toggleView(true)">CREATE ACCOUNT</button>
+                    <div class="mt-4 fw-medium" style="font-size: 0.85rem; opacity: 0.6; letter-spacing: 0.5px;">
+                        Developed by GMS MIS Zahid</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Loader -->
+    <div id="authLoader">
+        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+        <div class="h5 fw-bold">SECURELY LOADING...</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { loginUser, registerUser } from '../js/auth.js';
+
+        const main = document.getElementById('authContainer');
+        const loader = document.getElementById('authLoader');
+
+        window.toggleView = (reg) => {
+            if (reg) main.classList.add('is-register');
+            else main.classList.remove('is-register');
+        };
+
+        // Auth Operations
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const u = document.getElementById('u_name').value.trim();
+            const p = document.getElementById('p_word').value;
+            loader.style.display = 'flex';
+            try { await loginUser(u, p); } catch (err) { alert(err.message); loader.style.display = 'none'; }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const n = document.getElementById('r_full').value.trim();
+            const u = document.getElementById('r_user').value.trim();
+            const p = document.getElementById('r_pass').value;
+            loader.style.display = 'flex';
+            try {
+                await registerUser(u, p, n);
+                alert('Account Created! Welcome.');
+                toggleView(false);
+                loader.style.display = 'none';
+            } catch (err) { alert(err.message); loader.style.display = 'none'; }
+        });
+    </script>
+</body>
+
+</html>

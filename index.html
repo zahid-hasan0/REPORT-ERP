@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./gms icon.png" type="image/x-icon">
+    <title>REPORT ERP SYSTEM </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .form-control,
+        .form-select {
+            border: 1px solid #7c7f81a4 !important;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/protobi/js-xlsx-style/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script> -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <!-- ExcelJS used for exportExcel function -->
+    <script src="https://unpkg.com/exceljs/dist/exceljs.min.js"></script>
+
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- EmailJS for sending emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <link rel="stylesheet" href="in.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Theme Initialization Script -->
+    <script>
+        (function () {
+            try {
+                const THEME_VERSION = '2'; // Bump this when defaults change
+                const themeStr = localStorage.getItem('userCustomTheme');
+                const savedVersion = localStorage.getItem('themeVersion');
+
+                if (!themeStr || savedVersion !== THEME_VERSION) {
+                    localStorage.removeItem('userCustomTheme');
+                    localStorage.setItem('themeVersion', THEME_VERSION);
+                    const root = document.documentElement;
+                    root.style.setProperty('--dynamic-sidebar-bg', '#312e81');
+                    root.style.setProperty('--dynamic-sidebar-text', '#e0e7ff');
+                    root.style.setProperty('--dynamic-topbar-bg', '#1e1b4b');
+                    root.style.setProperty('--dynamic-primary', '#6366f1');
+                    root.style.setProperty('--dynamic-primary-hover', '#4f46e5');
+                } else {
+                    const theme = JSON.parse(themeStr);
+                    const root = document.documentElement;
+                    if (theme.sidebarBg) root.style.setProperty('--dynamic-sidebar-bg', theme.sidebarBg);
+                    if (theme.sidebarText) root.style.setProperty('--dynamic-sidebar-text', theme.sidebarText);
+                    if (theme.topbarBg) root.style.setProperty('--dynamic-topbar-bg', theme.topbarBg);
+                    if (theme.chartColor) root.style.setProperty('--dynamic-chart-primary', theme.chartColor);
+                    if (theme.primaryColor) {
+                        root.style.setProperty('--dynamic-primary', theme.primaryColor);
+                        root.style.setProperty('--dynamic-primary-hover', theme.primaryHover || theme.primaryColor);
+                    }
+                }
+            } catch (e) { console.error("Theme Loading Error:", e); }
+        })();
+    </script>
+</head>
+
+<body>
+
+
+    <div class="app-container">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left d-flex align-items-center">
+                <a href="#" class="header-brand me-4 d-flex align-items-center text-decoration-none">
+                    <img src="./gms icon.png" alt="Logo" class="logo-img me-2" style="height: 32px;">
+                    <span class="fw-bold text-white mb-0" style="font-size: 1.25rem; letter-spacing: -0.5px;">REPORT
+                        ERP</span>
+                </a>
+                <button id="sidebarToggle" class="erp-toggle-btn" title="Toggle Navigation">
+                    <i id="toggleIcon" class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="header-right">
+                <div class="date-widget">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="currentDate" class="fw-semibold"></span>
+                </div>
+
+                <button class="notification-btn" id="notif-bell-btn" title="View Notifications">
+                    <i class="far fa-bell"></i>
+                    <span class="badge-dot d-none" id="notif-badge"></span>
+                </button>
+
+                <button class="announcement-btn" id="announcement-btn" title="View Announcements">
+                    <i class="fas fa-bullhorn"></i>
+                    <span class="announcement-badge d-none" id="announcement-badge"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Notification Drawer -->
+        <div id="notif-drawer" class="notif-drawer">
+            <div class="notif-drawer-header">
+                <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notifications</h5>
+                <button class="btn-close btn-close-white" id="close-notif-drawer"></button>
+            </div>
+            <div class="notif-drawer-body" id="notif-list">
+                <div class="text-center p-5 text-muted small">
+                    <i class="fas fa-check-circle fa-2x mb-3 d-block opacity-25"></i>
+                    No unverified bookings
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcement Drawer -->
+        <div id="announcement-drawer" class="announcement-drawer">
+            <div class="announcement-drawer-header">
+                <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Announcements</h5>
+                <button class="btn-close btn-close-white" id="close-announcement-drawer"></button>
+            </div>
+            <div class="announcement-drawer-body" id="announcement-list">
+                <div class="text-center p-5 text-muted small">
+                    <i class="fas fa-inbox fa-2x mb-3 d-block opacity-25"></i>
+                    No announcements at this moment
+                </div>
+            </div>
+        </div>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-menu">
+                <a href="?page=dashboardPage" onclick="showPage('dashboardPage', event)" class="nav-link active"
+                    id="nav-dashboard">
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Trims Dropdown -->
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#trimsSubmenu" role="button" aria-expanded="false"
+                    aria-controls="trimsSubmenu" id="nav-trims-dropdown">
+                    <span>Trims</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8em; transition: transform 0.3s;"></i>
+                </a>
+
+                <div class="collapse" id="trimsSubmenu">
+                    <div class="nav flex-column ms-3 ps-2" style="border-left: 2px solid rgba(255,255,255,0.1);">
+                        <a href="?page=bookingPage" onclick="showPage('bookingPage', event)" class="nav-link"
+                            id="nav-booking">
+                            <span>Bookings</span>
+                        </a>
+                        <a href="?page=buyerManagementPage" onclick="showPage('buyerManagementPage', event)"
+                            class="nav-link" id="nav-buyers">
+                            <span>Buyer Library</span>
+                        </a>
+                        <a href="?page=reportPage" onclick="showPage('reportPage', event)" class="nav-link"
+                            id="nav-reports">
+                            <span>Reports</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- EMB Dropdown -->
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#embSubmenu" role="button" aria-expanded="false"
+                    aria-controls="embSubmenu" id="nav-emb-dropdown">
+                    <span>EMB</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8em; transition: transform 0.3s;"></i>
+                </a>
+
+                <div class="collapse" id="embSubmenu">
+                    <div class="nav flex-column ms-3 ps-2" style="border-left: 2px solid rgba(255,255,255,0.1);">
+                        <a href="?page=embEntryPage" onclick="showPage('embEntryPage', event)" class="nav-link"
+                            id="nav-emb-entry">
+                            <span>Emb Entry</span>
+                        </a>
+                        <a href="?page=embReportPage" onclick="showPage('embReportPage', event)" class="nav-link"
+                            id="nav-emb-report">
+                            <span>Emb Reports</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Buyer Notes (Main Menu) -->
+                <a href="?page=buyerNotesPage" onclick="showPage('buyerNotesPage', event)" class="nav-link"
+                    id="nav-buyer-notes">
+                    <span>Buyer Notes</span>
+                </a>
+
+                <!-- Merchandising Dropdown -->
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#merchandisingSubmenu" role="button" aria-expanded="false"
+                    aria-controls="merchandisingSubmenu" id="nav-merchandising-dropdown">
+                    <span>Merchandising</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8em; transition: transform 0.3s;"></i>
+                </a>
+
+                <div class="collapse" id="merchandisingSubmenu">
+                    <div class="nav flex-column ms-3 ps-2" style="border-left: 2px solid rgba(255,255,255,0.1);">
+                        <a href="?page=merchandisingPage" onclick="showPage('merchandisingPage', event)"
+                            class="nav-link" id="nav-merchandising">
+                            <span>Packing List</span>
+                        </a>
+                        <a href="?page=merchandisingBuyersPage" onclick="showPage('merchandisingBuyersPage', event)"
+                            class="nav-link" id="nav-merchandising-buyers">
+                            <span>Manage Buyers</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Personal Management Dropdown -->
+                <a class="nav-link collapsed d-flex justify-content-between align-items-center"
+                    data-bs-toggle="collapse" href="#personalSubmenu" role="button" aria-expanded="false"
+                    aria-controls="personalSubmenu" id="nav-personal-dropdown">
+                    <span>My Task</span>
+                    <i class="fas fa-chevron-down" style="font-size: 0.8em; transition: transform 0.3s;"></i>
+                </a>
+
+                <div class="collapse" id="personalSubmenu">
+                    <div class="nav flex-column ms-3 ps-2" style="border-left: 2px solid rgba(255,255,255,0.1);">
+                        <a href="?page=myTasksPage" onclick="showPage('myTasksPage', event)" class="nav-link"
+                            id="nav-my-tasks">
+                            <span>My Tasks</span>
+                        </a>
+                        <a href="?page=myDiaryPage" onclick="showPage('myDiaryPage', event)" class="nav-link"
+                            id="nav-my-diary">
+                            <span>My Diary</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="?page=profilePage" onclick="showPage('profilePage', event)" class="nav-link" id="nav-profile">
+                    <span>My Profile</span>
+                </a>
+                <a href="?page=settingsPage" onclick="showPage('settingsPage', event)" class="nav-link"
+                    id="nav-settings" style="cursor: pointer;">
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+
+            <!-- Profile Dropdown Card (in sidebar) -->
+            <div id="sidebarProfileDropdown" class="sidebar-profile-dropdown"
+                style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.3);">
+                <div class="profile-dropdown-content position-relative p-3" style="background: #1e293b;">
+                    <!-- Close button removed as requested -->
+                    <div class="d-grid">
+                        <button class="btn text-white fw-bold shadow-sm" onclick="logoutUser()"
+                            style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); border: none; border-radius: 8px; padding: 10px; font-size: 14px; letter-spacing: 0.5px;">
+                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer" id="sidebarFooterBtn" style="cursor: pointer;" title="Click to view profile">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div class="user-mini-profile d-flex align-items-center gap-2">
+                        <img id="sidebarProfileImage" src="./gms icon.png" alt="Profile"
+                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                        <div id="sidebarUserName" style="font-size: 0.85rem; font-weight: 600;">...</div>
+                    </div>
+                    <i id="sidebarChevron" class="fas fa-chevron-up"
+                        style="font-size: 0.9rem; transition: transform 0.3s;"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-wrapper">
+            <!-- Main Content Area -->
+            <main class="content-area">
+                <!-- Dynamic Content Container -->
+                <div id="app-content">
+                    <!-- Page content will be loaded here -->
+                </div>
+            </main>
+        </div> <!-- End Main Wrapper -->
+    </div> <!-- End App Container -->
+
+    <!-- Global Log Capture -->
+    <script>
+        window.appLogs = [];
+        (function () {
+            const originalLog = console.log;
+            const originalWarn = console.warn;
+            const originalError = console.error;
+
+            function formatArg(arg) {
+                if (typeof arg === 'object') {
+                    try {
+                        return JSON.stringify(arg);
+                    } catch (e) {
+                        return String(arg);
+                    }
+                }
+                return String(arg);
+            }
+
+            console.log = function (...args) {
+                window.appLogs.push({ type: 'log', time: new Date(), msg: args.map(formatArg).join(' ') });
+                // originalLog.apply(console, args); // Suppressed
+            };
+
+            console.warn = function (...args) {
+                window.appLogs.push({ type: 'warn', time: new Date(), msg: args.map(formatArg).join(' ') });
+                // originalWarn.apply(console, args); // Suppressed
+            };
+
+            console.error = function (...args) {
+                window.appLogs.push({ type: 'error', time: new Date(), msg: args.map(formatArg).join(' ') });
+                // originalError.apply(console, args); // Suppressed
+            };
+        })();
+    </script>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="confirmDeleteBtn" type="button" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Toast container will be created dynamically by toast.js -->
+
+    <!-- WhatsApp Modal -->
+    <div class="modal fade" id="whatsappModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="fw-bold mb-0"><i class="fab fa-whatsapp me-2"></i>Select Contact</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="waContactList" class="list-group list-group-flush mb-4"></div>
+                    <button class="btn btn-success w-100 fw-bold py-2 shadow-sm" id="waFinalSendBtn">
+                        <i class="fab fa-whatsapp me-2"></i>Send Message
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Full Report Modal -->
+    <div class="modal fade" id="whatsappFullModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="fw-bold mb-0"><i class="fab fa-whatsapp me-2"></i>Full Report Contacts</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="small text-muted mb-4">Select a contact to send the complete report summary.</p>
+                    <div id="waFullContactList" class="list-group list-group-flush mb-4"></div>
+                    <button class="btn btn-primary w-100 fw-bold py-2 shadow-sm" id="waFullFinalSendBtn">
+                        <i class="fab fa-whatsapp me-2"></i>Send Full Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Message Modal (Alert Replacement) -->
+    <div class="modal fade" id="messageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="msgModalTitle">Notice</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3">
+                        <i id="msgModalIcon" class="fas fa-info-circle fa-3x text-primary"></i>
+                    </div>
+                    <p id="msgModalText" class="mb-0 text-muted" style="font-size: 1.1rem;"></p>
+                </div>
+                <div class="modal-footer border-top-0 pt-0 justify-content-center">
+                    <button type="button" class="btn btn-primary px-4 fw-bold" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold">Confirmation</h5>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-question-circle fa-3x text-warning"></i>
+                    </div>
+                    <p id="confirmModalText" class="mb-0 text-muted fs-5"></p>
+                </div>
+                <div class="modal-footer border-top-0 pt-0 justify-content-center gap-2">
+                    <button type="button" class="btn btn-outline-secondary fw-bold px-4"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger fw-bold px-4" id="confirmModalYesBtn">Yes,
+                        Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Input Modal -->
+    <div class="modal fade" id="inputModal" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="inputModalTitle">Input Required</h5>
+                </div>
+                <div class="modal-body p-4">
+                    <p id="inputModalText" class="mb-3 text-muted fs-5"></p>
+                    <input type="text" id="inputModalField" class="form-control form-control-lg" />
+                </div>
+                <div class="modal-footer border-top-0 pt-0 justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary fw-bold px-4"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary fw-bold px-4" id="inputModalSubmitBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Alert Replacement
+        window.showMessage = function (msg, type = 'info') {
+            const modalEl = document.getElementById('messageModal');
+            if (!modalEl) return;
+
+            const titleEl = document.getElementById('msgModalTitle');
+            const textEl = document.getElementById('msgModalText');
+            const iconEl = document.getElementById('msgModalIcon');
+
+            textEl.textContent = msg;
+
+            // Reset Classes
+            iconEl.className = 'fas fa-3x mb-3 text-primary';
+            titleEl.textContent = 'Notice';
+
+            if (type === 'error') {
+                iconEl.className = 'fas fa-exclamation-circle fa-3x mb-3 text-danger';
+                titleEl.textContent = 'Error';
+            } else if (type === 'success') {
+                iconEl.className = 'fas fa-check-circle fa-3x mb-3 text-success';
+                titleEl.textContent = 'Success';
+            }
+
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        };
+
+        // Override default alert
+        window.alert = function (msg) {
+            window.showMessage(msg, 'info');
+        };
+
+        // Global Confirm (Promise-based)
+        window.showConfirm = function (msg) {
+            return new Promise((resolve) => {
+                const modalEl = document.getElementById('confirmModal');
+                const textEl = document.getElementById('confirmModalText');
+                const yesBtn = document.getElementById('confirmModalYesBtn');
+
+                textEl.textContent = msg;
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+
+                let resolved = false;
+
+                const handleYes = () => {
+                    resolve(true);
+                    resolved = true;
+                    modal.hide();
+                };
+
+                const handleHidden = () => {
+                    if (!resolved) resolve(false);
+                    yesBtn.removeEventListener('click', handleYes);
+                    modalEl.removeEventListener('hidden.bs.modal', handleHidden);
+                };
+
+                yesBtn.addEventListener('click', handleYes);
+                modalEl.addEventListener('hidden.bs.modal', handleHidden);
+            });
+        };
+
+        // Global Prompt (Promise-based)
+        window.showPrompt = function (msg, placeholder = '') {
+            return new Promise((resolve) => {
+                const modalEl = document.getElementById('inputModal');
+                const textEl = document.getElementById('inputModalText');
+                const inputEl = document.getElementById('inputModalField');
+                const submitBtn = document.getElementById('inputModalSubmitBtn');
+
+                textEl.textContent = msg;
+                inputEl.value = '';
+                inputEl.placeholder = placeholder;
+
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+
+                // Focus input after show
+                modalEl.addEventListener('shown.bs.modal', () => inputEl.focus(), { once: true });
+
+                let resolved = false;
+
+                const handleSubmit = () => {
+                    const val = inputEl.value.trim();
+                    // if(!val) return; // Allow empty string? Native prompt allows it.
+                    resolve(val);
+                    resolved = true;
+                    modal.hide();
+                };
+
+                // Allow Enter key
+                const handleKey = (e) => {
+                    if (e.key === 'Enter') handleSubmit();
+                }
+                inputEl.addEventListener('keyup', handleKey);
+
+                const handleHidden = () => {
+                    if (!resolved) resolve(null); // Return null on cancel
+                    submitBtn.removeEventListener('click', handleSubmit);
+                    inputEl.removeEventListener('keyup', handleKey);
+                    modalEl.removeEventListener('hidden.bs.modal', handleHidden);
+                };
+
+                submitBtn.addEventListener('click', handleSubmit);
+                modalEl.addEventListener('hidden.bs.modal', handleHidden);
+            });
+        };
+    </script>
+
+    <!-- Profile View Modal (First Step) -->
+    <div class="modal fade" id="profileViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 justify-content-center">
+                    <h5 class="modal-title fw-bold text-dark text-uppercase" style="letter-spacing: 1px;">My Profile
+                    </h5>
+                </div>
+                <div class="modal-body p-4 pt-2">
+                    <!-- Profile Display -->
+                    <div class="text-center mb-4 mt-2">
+                        <div class="position-relative d-inline-block p-1 rounded-circle"
+                            style="background: linear-gradient(135deg, #e2e8f0 0%, #ffffff 100%); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            <img id="viewModalProfileImage" src="./gms icon.png" alt="Profile"
+                                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                        </div>
+                        <h5 id="viewModalProfileName" class="mt-3 mb-1 fw-bold text-dark">User Name</h5>
+                        <p class="text-muted small mb-0 text-uppercase fw-semibold" id="viewModalUserRole"
+                            style="letter-spacing: 1px;">Role</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-light py-2 fw-semibold text-start px-3 shadow-sm border"
+                            id="openEditProfileBtn" style="border-radius: 10px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-user-edit me-2 text-primary"></i>Edit details</span>
+                                <i class="fas fa-chevron-right small text-muted"></i>
+                            </div>
+                        </button>
+
+                        <button class="btn text-white py-2 fw-bold shadow mt-2" onclick="logoutUser()"
+                            data-bs-dismiss="modal"
+                            style="background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); border: none; border-radius: 10px; transition: transform 0.2s;">
+                            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                        </button>
+
+                        <button class="btn btn-link text-muted text-decoration-none small mt-1"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal (Second Step) -->
+    <div class="modal fade" id="profileEditModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-user-edit me-2 text-primary"></i>Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Profile Display -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+                            <img id="editModalProfileImage" src="./gms icon.png" alt="Profile"
+                                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #e2e8f0;">
+                            <label for="profileImageUpload"
+                                class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                style="width: 32px; height: 32px; cursor: pointer; transition: transform 0.2s;">
+                                <i class="fas fa-camera" style="font-size: 14px;"></i>
+                            </label>
+                            <input type="file" id="profileImageUpload" accept="image/*" class="d-none">
+                        </div>
+                        <h6 id="editModalProfileName" class="mt-3 mb-1 fw-bold">User Name</h6>
+                        <p class="text-muted small mb-0" id="editModalUserRole">Role</p>
+                    </div>
+
+                    <!-- Edit Name Section -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Display Name</label>
+                        <input type="text" class="form-control" id="profileNameInput" placeholder="Enter your name">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" id="saveProfileBtn">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/storage.js"></script>
+    <script type="module" src="js/formHandler.js"></script>
+    <script type="module" src="js/display.js"></script>
+    <script type="module" src="js/charts.js"></script>
+    <script type="module" src="js/excel.js"></script>
+    <script type="module" src="js/summary.js"></script>
+    <script type="module" src="js/navigation.js"></script>
+    <script type="module" src="js/profile.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/toast.js"></script>
+    <script type="module" src="js/notice.js"></script>
+    <script type="module" src="js/buyerManager.js"></script>
+    <script type="module" src="js/profileManagement.js"></script>
+    <script type="module" src="js/announcements.js"></script>
+    <script>
+        emailjs.init("0aDbxJFtUAoEotVjr");
+    </script>
+    <script type="module" src="js/emailReport.js"></script>
+    <!-- auto update filter month -->
+    <script>
+        // Add auto-focus for buyer search when dropdown opens
+        const buyerDropdown = document.getElementById('buyerDropdownContainer');
+        if (buyerDropdown) {
+            buyerDropdown.addEventListener('shown.bs.dropdown', function () {
+                const searchInput = document.getElementById('buyerSearchInput');
+                if (searchInput) searchInput.focus();
+            });
+        }
+    </script>
+
+    <!-- Clock Script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const dateParams = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            const timeParams = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+
+            const dateEl = document.getElementById('clockDate');
+            const timeEl = document.getElementById('clockTime');
+
+            if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', dateParams);
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', timeParams);
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Run immediately
+    </script>
+
+    <!-- Clock Modal -->
+    <div id="clockModal" class="clock-modal">
+        <div class="clock-modal-content">
+            <span class="close-clock">&times;</span>
+            <div class="big-clock-wrapper">
+                <div id="bigClockDate" class="big-clock-date"></div>
+                <div id="bigClockTime" class="big-clock-time"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

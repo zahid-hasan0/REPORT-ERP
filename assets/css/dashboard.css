@@ -1,0 +1,175 @@
+/* dashboard.css */
+
+.dashboard-title {
+    font-weight: bolder;
+    color: #061868;
+}
+
+/* Vibrant & Eye-Catching Dashboard Cards */
+.vibrant-stat-card {
+    border: none;
+    border-radius: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.vibrant-stat-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradients */
+.gradient-1 {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+/* Indigo -> Purple */
+.gradient-2 {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+/* Emerald -> Green */
+.gradient-3 {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+}
+
+/* Amber -> Orange */
+.gradient-4 {
+    background: linear-gradient(135deg, #be185d 0%, #db2777 100%);
+}
+
+/* Rose -> Pink */
+
+.vibrant-bg-icon {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    font-size: 8rem;
+    opacity: 0.15;
+    transform: rotate(-15deg);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.vibrant-stat-card:hover .vibrant-bg-icon {
+    transform: rotate(0deg) scale(1.2);
+    opacity: 0.25;
+}
+
+.vibrant-stat-card .card-body {
+    width: 100%;
+    padding: 20px;
+    z-index: 2;
+    display: flex;
+    /* Added for new layout */
+    align-items: center;
+    /* Added for new layout */
+}
+
+.vibrant-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-right: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.vibrant-text-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vibrant-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    opacity: 0.85;
+    margin-bottom: 2px;
+}
+
+.vibrant-number {
+    font-size: 3rem;
+    font-weight: 950;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.card[style*="height: 500px"] {
+    height: 500px;
+}
+
+.card-body[style*="height: 600px"] {
+    height: 600px;
+}
+
+.chart-wrapper {
+    position: relative;
+}
+
+.customer-monthly-chart-wrapper {
+    height: 550px;
+    width: 100%;
+}
+
+.top-customers-chart-wrapper {
+    height: 400px;
+}
+
+.top-buyers-card-body {
+    z-index: 0;
+    padding: 40px 20px;
+    overflow: visible;
+    height: 600px;
+}
+
+.top-buyers-chart-wrapper {
+    height: 500px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+#buyerChart {
+    z-index: 1;
+}
+
+/* Specific alignments from inline styles */
+.dashboard-grid {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 0px;
+    flex-wrap: wrap;
+}
+
+.dashboard-chart-col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1 1 600px;
+    margin-bottom: 20px;
+}
+
+.dashboard-chart-col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1 1 400px;
+}

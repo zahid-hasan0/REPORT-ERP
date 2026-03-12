@@ -1,0 +1,186 @@
+<!-- pages/my-diary.html -->
+<style>
+    #my-diary-module {
+        background: #fdfdfd;
+        min-height: 100vh;
+    }
+
+    #my-diary-module .diary-card {
+        border-radius: 24px;
+        padding: 2.25rem;
+        border: none;
+        box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        color: white;
+    }
+
+    #my-diary-module .diary-card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Colorful Variants */
+    #my-diary-module .card-variant-1 {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+
+    #my-diary-module .card-variant-2 {
+        background: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
+    }
+
+    #my-diary-module .card-variant-3 {
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    }
+
+    #my-diary-module .card-variant-4 {
+        background: linear-gradient(135deg, #10b981 0%, #6366f1 100%);
+    }
+
+    #my-diary-module .card-variant-5 {
+        background: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
+    }
+
+    #my-diary-module .entry-date-badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        font-weight: 800;
+        font-size: 0.7rem;
+        padding: 6px 14px;
+        border-radius: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        backdrop-filter: blur(5px);
+    }
+
+    #my-diary-module .diary-title {
+        color: white;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+    }
+
+    #my-diary-module .diary-content-preview {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        line-height: 1.8;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    #my-diary-module .diary-header {
+        background: #0f172a;
+        padding: 5rem 3rem;
+        border-radius: 0 0 40px 40px;
+        color: white;
+        margin-bottom: 4rem;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    #my-diary-module .form-card {
+        margin-top: -6rem;
+        background: white;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+    }
+
+    #my-diary-module .form-floating>.form-control {
+        border-radius: 15px;
+        border: 1px solid #f1f5f9;
+        background: #f8fafc;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    #my-diary-module .btn-save {
+        border-radius: 15px;
+        font-weight: 800;
+        padding: 1rem;
+        background: #0f172a;
+        color: white;
+        border: none;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+    }
+</style>
+
+<div id="my-diary-module">
+    <!-- Header -->
+    <div class="diary-header">
+        <h1 class="fw-bold mb-2">Personal Reflections</h1>
+        <p class="text-white-50 mb-4 ls-1">Record your thoughts, lessons, and daily inspirations.</p>
+        <div class="d-inline-flex align-items-center gap-3 bg-white bg-opacity-10 p-2 px-4 rounded-pill">
+            <span class="text-white-50 small">Total Memories:</span>
+            <span class="fw-bold" id="diary-total-count">0</span>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <!-- Entry Form -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="form-card">
+                    <form id="diaryForm" class="row g-4">
+                        <input type="hidden" id="diaryEditId">
+                        <div class="col-md-8">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="diaryTopic" placeholder="Topic" required>
+                                <label for="diaryTopic">What's the topic today?</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-save w-100 h-100" id="diarySubmitBtn">
+                                <i class="fas fa-feather-pointed me-2"></i>Save Reflection
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="diaryContent" placeholder="Write here..."
+                                    style="height: 200px" required></textarea>
+                                <label for="diaryContent">Dear Diary...</label>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="button" class="btn btn-link text-muted fw-bold text-decoration-none"
+                                onclick="resetDiaryForm()">
+                                Clear and Start Over
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diary Grid -->
+        <div id="diaryListContainer" class="row g-4">
+            <!-- Loading state -->
+            <div class="col-12 text-center py-5">
+                <div class="spinner-grow text-primary" role="status"></div>
+                <div class="mt-3 text-muted fw-bold">Unlocking memories...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteDiaryModal" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-body p-4 text-center">
+                <div class="text-danger mb-3"><i class="fas fa-trash-can fa-3x"></i></div>
+                <h5 class="fw-bold">Remove Entry?</h5>
+                <p class="text-muted small">This memory will be deleted permanently.</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light border flex-grow-1" data-bs-dismiss="modal">Keep</button>
+                    <button class="btn btn-danger flex-grow-1" id="confirmDeleteDiaryBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

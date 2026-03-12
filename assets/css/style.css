@@ -1,0 +1,873 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Branding */
+    --primary-color: #2563eb;
+    --secondary-color: #3b82f6;
+
+    /* Layout Backgrounds */
+    --background-color: #e2e8f0;
+    --card-bg: #ffffff;
+
+    /* Text Colors */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+
+    /* Frame Configuration */
+    --border-color: #cbd5e1;
+    --sidebar-width: 280px;
+    --header-height: 70px;
+    --transition-speed: 0.3s;
+
+    /* Dynamic Theme Variables — Rich Indigo Premium (default) */
+    --dynamic-sidebar-bg: #312e81;
+    --dynamic-sidebar-text: #e0e7ff;
+    --dynamic-topbar-bg: #1e1b4b;
+    --dynamic-primary: #6366f1;
+    /* accent for buttons, badges, active states */
+    --dynamic-primary-hover: #4f46e5;
+}
+
+/* ===== GLOBAL THEME OVERRIDES ===== */
+/* All Bootstrap btn-primary across every page follows the active theme */
+.btn-primary {
+    background-color: var(--dynamic-primary) !important;
+    border-color: var(--dynamic-primary) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--dynamic-primary-hover) !important;
+    border-color: var(--dynamic-primary-hover) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-outline-primary {
+    color: var(--dynamic-primary) !important;
+    border-color: var(--dynamic-primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--dynamic-primary) !important;
+    color: white !important;
+}
+
+/* Bootstrap text-primary & bg-primary */
+.text-primary {
+    color: var(--dynamic-primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--dynamic-primary) !important;
+}
+
+/* Form focus rings */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--dynamic-primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--dynamic-primary) 25%, transparent) !important;
+}
+
+/* Table headers across all pages */
+.table thead th {
+    background-color: var(--dynamic-topbar-bg) !important;
+    color: var(--dynamic-sidebar-text) !important;
+    border-color: color-mix(in srgb, var(--dynamic-primary) 30%, transparent) !important;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Layout Grid */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Sidebar - Starts below Header */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: 280px;
+    max-width: 280px;
+    background: var(--dynamic-sidebar-bg);
+    /* Beautiful premium slate-50 off-white by default */
+    color: var(--dynamic-sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: calc(100vh - var(--header-height));
+    left: 0;
+    top: var(--header-height);
+    z-index: 1000;
+    transition: transform var(--transition-speed) ease, width var(--transition-speed) ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Sidebar Collapsed State */
+.app-collapsed .sidebar {
+    transform: translateX(-280px);
+}
+
+/* Branding in Header */
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    height: 32px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: 1.5rem 0.75rem;
+    /* Tighter padding */
+    overflow-y: auto;
+}
+
+.menu-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--dynamic-sidebar-text);
+    opacity: 0.7;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    padding-left: 1rem;
+    font-weight: 700;
+}
+
+.menu-category:first-child {
+    margin-top: 0;
+}
+
+/* Nav Items - Premium Light Design */
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.25rem;
+    color: var(--dynamic-sidebar-text);
+    opacity: 0.8;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 0 0.8rem 0.4rem 0.8rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+    background: transparent;
+    border: none;
+}
+
+.nav-link:hover {
+    background-color: rgba(128, 128, 128, 0.15);
+    /* Universal hover overlay */
+    color: var(--dynamic-sidebar-text);
+    opacity: 1;
+    transform: none;
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: var(--dynamic-sidebar-text);
+    opacity: 1;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+/* Remove old icon styles */
+.nav-link i.fa-chevron-down {
+    margin-left: auto;
+    /* Push chevron to right */
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.nav-link:hover i.fa-chevron-down {
+    opacity: 1;
+}
+
+/* Submenu Styles */
+.nav.flex-column {
+    margin-left: 1.25rem !important;
+    border-left: 1px solid var(--border-color);
+    margin-top: 0.25rem;
+}
+
+.nav.flex-column .nav-link {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    border-left: none;
+    color: var(--dynamic-sidebar-text);
+    opacity: 0.7;
+}
+
+.nav.flex-column .nav-link:hover {
+    background: rgba(128, 128, 128, 0.15);
+    color: var(--dynamic-sidebar-text);
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+.sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+    color: var(--dynamic-sidebar-text);
+}
+
+.sidebar-footer:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Sidebar Profile Dropdown */
+.sidebar-profile-dropdown {
+    position: absolute;
+    bottom: 80px;
+    /* Position ABOVE the footer */
+    left: 10px;
+    /* Add some spacing from edges */
+    right: 10px;
+    background: #0f172a;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Full border */
+    border-radius: 12px;
+    /* Rounded corners */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(20px);
+    /* Start slightly lower */
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 100;
+    /* Removed padding-bottom */
+}
+
+.sidebar-profile-dropdown.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.profile-dropdown-content {
+    padding: 1.5rem;
+}
+
+.user-mini-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 170px;
+    overflow: hidden;
+}
+
+#sidebarUserName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Main Content Wrapper - Fixed margin for zoom stability */
+/* Main Content Wrapper */
+.main-wrapper {
+    flex: 1;
+    margin-left: 280px;
+    margin-top: var(--header-height);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--header-height));
+    width: calc(100% - 280px);
+    position: relative;
+    transition: margin-left var(--transition-speed) ease, width var(--transition-speed) ease;
+}
+
+/* Main Wrapper Expanded State (Sidebar Hidden) */
+.app-collapsed .main-wrapper {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* Full Width Elite Header (Dark Navy) */
+.top-header {
+    height: var(--header-height);
+    width: 100%;
+    background: var(--dynamic-topbar-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+
+.top-header .text-white {
+    color: #e2e8f0 !important;
+}
+
+/* Professional ERP Sidebar Toggle */
+.erp-toggle-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #94a3b8;
+    outline: none;
+    font-size: 1.1rem;
+}
+
+.erp-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.erp-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.label-text,
+.icon-circle {
+    display: none;
+}
+
+/* Cleanup safely */
+
+.header-brand {
+    display: flex !important;
+}
+
+.header-v-separator {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-left: 20px;
+}
+
+/* Sidebar Transition Overrides */
+.sidebar,
+.main-wrapper {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.date-widget {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    transition: background 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.date-widget:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.date-widget i {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Notification Button */
+.notification-btn {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.notification-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+
+.badge-dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+/* Notification Drawer */
+.notif-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-drawer.active {
+    right: 0;
+}
+
+.notif-drawer-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.notif-drawer-header h5 {
+    color: white;
+    font-weight: 600;
+}
+
+.notif-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.notif-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.notif-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notif-card-readonly {
+    cursor: default;
+    opacity: 0.9;
+}
+
+.notif-card-readonly:hover {
+    transform: none;
+}
+
+/* Announcement Button */
+.announcement-btn {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+}
+
+.announcement-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.announcement-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+/* Announcement Drawer */
+.announcement-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.announcement-drawer.active {
+    right: 0;
+}
+
+.announcement-drawer-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.announcement-drawer-header h5 {
+    color: rgb(0, 0, 0);
+    font-weight: 600;
+}
+
+.announcement-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.announcement-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.announcement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.announcement-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.announcement-card-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.announcement-card-text {
+    color: #334155;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+
+
+.notification-btn i {
+    transition: transform 0.3s ease;
+}
+
+.notification-btn:hover i {
+    animation: ring 0.5s ease;
+}
+
+@keyframes ring {
+    0% {
+        transform: rotate(0);
+    }
+
+    15% {
+        transform: rotate(15deg);
+    }
+
+    30% {
+        transform: rotate(-15deg);
+    }
+
+    45% {
+        transform: rotate(10deg);
+    }
+
+    60% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(5deg);
+    }
+
+    85% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0);
+    }
+}
+
+/* Notification Drawer */
+.notif-drawer {
+    position: fixed;
+    top: 0;
+    right: -380px;
+    width: 380px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-drawer.open {
+    right: 0;
+}
+
+.notif-drawer-header {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notif-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    background: #f8fafc;
+}
+
+.notif-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #ef4444;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    border-left-width: 4px;
+}
+
+.notif-card:hover {
+    transform: translateX(4px);
+    background: #fffcf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+}
+
+.notif-card-readonly {
+    cursor: default !important;
+}
+
+.notif-card-readonly:hover {
+    transform: none !important;
+    background: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.notif-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+}
+
+.notif-meta {
+    font-size: 1rem;
+    color: #64748b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.notif-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-dot {
+    position: absolute;
+    top: -12px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: #ef4444;
+    border-radius: 50%;
+
+}
+
+/* Badge count style if we use text instead of just a dot */
+#notif-badge.has-count {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 800;
+    top: 2px;
+    right: 2px;
+}
+
+/* Content Area */
+.content-area {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Override existing page classes */
+.page {
+    display: none;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Improvements */
+.card {
+    border: none;
+    border-radius: 12px;
+    background: var(--card-bg);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+}
+
+.card-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Stats Cards */
+.stat-card {
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    .sidebar.mobile-active {
+        transform: translateX(0);
+    }
+}

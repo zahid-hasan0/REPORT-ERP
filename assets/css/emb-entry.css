@@ -1,0 +1,97 @@
+/* emb-entry.css - Professional Style */
+
+/* Match booking page card style */
+.booking-list-card {
+    border: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+.booking-list-card .card-header {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Professional table styling */
+.table {
+    margin-bottom: 0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f5f9;
+    transition: background-color 0.2s ease;
+}
+
+.table thead.table-light th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 12px 10px;
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+.table tbody td {
+    padding: 10px;
+    vertical-align: middle;
+    font-size: 0.875rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Prevent text wrapping in all columns */
+.table td,
+.table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Comments column - fixed width with ellipsis */
+.table tbody td:nth-child(7) {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Form controls */
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button styling */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Action buttons in table rows */
+.btn-gms-row {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* Input fields in table */
+.table input.form-control,
+.table select.form-select {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+}
+
+.table input.form-control:focus,
+.table select.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15);
+}

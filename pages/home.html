@@ -1,0 +1,219 @@
+<!-- pages/home.html -->
+<div class="static-landing-wrapper animate-fade-in">
+    <!-- Main Art Section -->
+    <div class="landing-art-card shadow-lg overflow-hidden border-0">
+        <div class="art-overlay"></div>
+        <div class="art-content text-center py-5">
+            <div class="brand-tag mb-4">REPORT ERP • PREMIUM</div>
+            <h1 class="main-title mb-3">Elevate Your Workflow</h1>
+            <p class="subtitle mx-auto mb-5">
+                Precision tools designed for professional order management.
+                Experience a seamless interface where data meets design.
+            </p>
+            <div class="hero-actions d-flex justify-content-center gap-3">
+                <button class="btn btn-dark shadow rounded-pill px-5 py-3 fw-bold"
+                    onclick="showPage('dashboardPage')">Enter Workspace</button>
+            </div>
+        </div>
+
+        <!-- Animated Background Elements (Pure CSS) -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Static Info Grid -->
+    <div class="row g-4 mt-4">
+        <div class="col-md-4">
+            <div class="info-tile p-4 h-100">
+                <div class="tile-icon mb-3 bg-primary-subtle text-primary">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h5 class="fw-bold">Efficiency First</h5>
+                <p class="text-muted small mb-0">Streamlined booking processes designed to minimize entry time and
+                    maximize output.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-tile p-4 h-100">
+                <div class="tile-icon mb-3 bg-info-subtle text-info">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <h5 class="fw-bold">Digital Integrity</h5>
+                <p class="text-muted small mb-0">Secure tracking of every trim, unit, and report within a unified
+                    digital environment.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-tile p-4 h-100">
+                <div class="tile-icon mb-3 bg-warning-subtle text-warning">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h5 class="fw-bold">Navigational Clarity</h5>
+                <p class="text-muted small mb-0">Intuitive interface that guides you through complex embroidery and
+                    booking logs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivational Footer Strip -->
+    <div class="footer-strip mt-5 p-4 rounded-4 text-center">
+        <span class="text-secondary small fw-semibold">
+            <i class="fas fa-award text-warning me-2"></i>THE ULTIMATE OPERATIONAL HUB • BUILT FOR PROFESSIONALS
+        </span>
+    </div>
+</div>
+
+<style>
+    .static-landing-wrapper {
+        padding: 3rem 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: transparent;
+    }
+
+    .landing-art-card {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border-radius: 40px;
+        position: relative;
+        min-height: 450px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .art-content {
+        position: relative;
+        z-index: 10;
+        max-width: 700px;
+    }
+
+    .brand-tag {
+        font-size: 0.75rem;
+        letter-spacing: 4px;
+        font-weight: 800;
+        color: #64748b;
+        background: rgba(100, 116, 139, 0.1);
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 100px;
+    }
+
+    .main-title {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        color: #0f172a;
+        line-height: 1;
+    }
+
+    .subtitle {
+        font-size: 1.15rem;
+        color: #475569;
+        line-height: 1.6;
+        opacity: 0.8;
+    }
+
+    /* Floating Orbs */
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 1;
+        opacity: 0.4;
+        animation: orbFloat 20s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: #3b82f6;
+        top: -150px;
+        right: -50px;
+    }
+
+    .orb-2 {
+        width: 300px;
+        height: 300px;
+        background: #6366f1;
+        bottom: -100px;
+        left: -80px;
+        animation-delay: -5s;
+    }
+
+    .orb-3 {
+        width: 200px;
+        height: 200px;
+        background: #f59e0b;
+        top: 150px;
+        left: 100px;
+        animation-delay: -10s;
+    }
+
+    @keyframes orbFloat {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+
+        100% {
+            transform: translate(50px, 30px) scale(1.1);
+        }
+    }
+
+    /* Info Tiles */
+    .info-tile {
+        background: white;
+        border-radius: 28px;
+        border: 1.5px solid #f1f5f9;
+        transition: all 0.3s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-tile:hover {
+        transform: translateY(-5px);
+        border-color: #3b82f6;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    .tile-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .footer-strip {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    .animate-fade-in {
+        animation: fadeInHome 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes fadeInHome {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 2.5rem;
+        }
+
+        .static-landing-wrapper {
+            padding: 2rem;
+        }
+    }
+</style>

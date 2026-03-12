@@ -1,0 +1,382 @@
+<!-- pages/my-tasks.html -->
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.4);
+        --elite-navy: #0f172a;
+    }
+
+    #my-tasks-module {
+        background: #f8fafc;
+        min-height: 100vh;
+    }
+
+    #my-tasks-module .stats-card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.75rem;
+        border: 1px solid #eef2f6;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #my-tasks-module .stats-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    #my-tasks-module .icon-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    /* Task Strips */
+    #my-tasks-module .task-strip {
+        background: white;
+        border-radius: 18px;
+        border: 1px solid #f1f5f9;
+        margin-bottom: 1rem;
+        padding: 1.25rem 1.5rem;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        align-items: center;
+        gap: 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #my-tasks-module .task-strip::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: #cbd5e1;
+    }
+
+    #my-tasks-module .task-strip.priority-high::before {
+        background: var(--danger);
+    }
+
+    #my-tasks-module .task-strip.priority-medium::before {
+        background: var(--accent);
+    }
+
+    #my-tasks-module .task-strip.priority-low::before {
+        background: var(--success);
+    }
+
+    #my-tasks-module .task-strip:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        border-color: #e2e8f0;
+    }
+
+    #my-tasks-module .task-strip.completed {
+        background: #f8fafc;
+        opacity: 0.7;
+    }
+
+    #my-tasks-module .task-strip.completed .task-title {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+
+    /* Checkbox Styling */
+    #my-tasks-module .status-toggle {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border: 2px solid #cbd5e1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    #my-tasks-module .status-toggle.checked {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: white;
+    }
+
+    /* Tags & Badges */
+    #my-tasks-module .tag {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 6px;
+        background: #f1f5f9;
+        color: #64748b;
+        letter-spacing: 0.5px;
+    }
+
+    #my-tasks-module .title-area {
+        min-width: 0;
+    }
+
+    #my-tasks-module .task-title {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 1.05rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Header & Form */
+    #my-tasks-module .module-header {
+        background: var(--primary);
+        padding: 4rem 3rem;
+        border-radius: 32px;
+        color: white;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    #my-tasks-module .search-container {
+        position: relative;
+        width: 300px;
+    }
+
+    #my-tasks-module .search-container i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+    }
+
+    #my-tasks-module .search-container input {
+        padding-left: 45px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        font-size: 0.9rem;
+    }
+
+    #my-tasks-module .card-title-pro {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Custom Searchable Dropdown for Tasks */
+    .task-buyer-dropdown-container .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 0;
+        overflow: hidden;
+        min-width: 100%;
+    }
+
+    .task-buyer-search-wrapper {
+        padding: 10px;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .task-buyer-search-wrapper input {
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+
+    .task-buyer-options-list {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .task-buyer-options-list .dropdown-item {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.2s;
+    }
+
+    .task-buyer-options-list .dropdown-item:hover {
+        background: #f1f5f9;
+        padding-left: 20px;
+    }
+
+    .task-buyer-selected-label {
+        font-size: 0.9rem;
+        color: #334155;
+    }
+</style>
+
+<div id="my-tasks-module">
+    <div class="p-4">
+        <!-- Dashboard Header -->
+        <div class="module-header d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="fw-bold mb-2">My Task Planner</h1>
+                <p class="text-white-50 mb-0 fs-5">Premium priority management & personal records.</p>
+            </div>
+            <div class="d-none d-md-block">
+                <div class="btn-toggle-group">
+                    <button class="btn-toggle active" onclick="switchTaskView('all')">All Entries</button>
+                    <button class="btn-toggle" onclick="switchTaskView('Task')">Tasks Only</button>
+                    <button class="btn-toggle" onclick="switchTaskView('Note')">Personal Notes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-circle bg-primary-subtle text-primary shadow-sm">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase ls-1">Active Items</div>
+                        <h2 class="fw-bold mb-0" id="stat-active">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-circle bg-danger-subtle text-danger shadow-sm">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase ls-1">Critical Priority</div>
+                        <h2 class="fw-bold mb-0" id="stat-high">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-circle bg-success-subtle text-success shadow-sm">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase ls-1">Finalized Today</div>
+                        <h2 class="fw-bold mb-0" id="stat-done">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sidebar / Form -->
+            <div class="col-xl-4">
+                <div class="form-card p-4 shadow-sm border-0 sticky-top" style="top: 100px; z-index: 10;">
+                    <h5 class="card-title-pro"><i class="fas fa-plus-circle me-2 text-primary"></i>Quick Entry</h5>
+                    <form id="taskForm" class="row g-3">
+                        <input type="hidden" id="taskEditId">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Title / Heading</label>
+                            <input type="text" class="form-control py-2 shadow-sm" id="taskTitle"
+                                placeholder="What's on your mind?" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Type</label>
+                            <select class="form-select py-2" id="taskType">
+                                <option value="Task">Task</option>
+                                <option value="Note">Note</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Priority</label>
+                            <select class="form-select py-2" id="taskPriority">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Link to Buyer</label>
+                            <div class="dropdown task-buyer-dropdown-container">
+                                <button
+                                    class="btn btn-outline-secondary w-100 text-start d-flex justify-content-between align-items-center py-2 bg-white border shadow-sm"
+                                    type="button" id="taskBuyerDropdownBtn" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span id="selectedTaskBuyerLabel" class="task-buyer-selected-label">General /
+                                        Private</span>
+                                    <i class="fas fa-chevron-down small opacity-50"></i>
+                                </button>
+                                <div class="dropdown-menu shadow-lg" aria-labelledby="taskBuyerDropdownBtn">
+                                    <div class="task-buyer-search-wrapper">
+                                        <input type="text" class="form-control form-control-sm"
+                                            id="taskBuyerSearchInput" placeholder="Search buyer..." autocomplete="off">
+                                    </div>
+                                    <div id="taskBuyerOptionsList" class="task-buyer-options-list">
+                                        <!-- Options populated via JS -->
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="taskBuyer" value="General">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Extended Details</label>
+                            <textarea class="form-control py-2" id="taskDetail" rows="3"
+                                placeholder="Additional information..."></textarea>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow" id="taskSubmitBtn">
+                                <i class="fas fa-cloud-upload-alt me-2"></i>Save Record
+                            </button>
+                            <button type="button" class="btn btn-light w-100 py-2 fw-bold mt-2"
+                                onclick="resetTaskForm()">
+                                Clear Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- List Overlay -->
+            <div class="col-xl-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title-pro mb-0">Record List</h5>
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="taskSearch" class="form-control" placeholder="Quick find...">
+                    </div>
+                </div>
+
+                <div id="taskStripList">
+                    <!-- Loading state -->
+                    <div class="text-center py-5">
+                        <div class="spinner-grow text-primary" role="status"></div>
+                        <div class="mt-3 text-muted fw-bold">Opening your records...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteTaskModal" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-body p-4 text-center">
+                <div class="text-danger mb-3"><i class="fas fa-trash-can fa-3x"></i></div>
+                <h5 class="fw-bold">Delete Task?</h5>
+                <p class="text-muted small">Are you sure you want to remove this record?</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light border flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger flex-grow-1" id="confirmDeleteTaskBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

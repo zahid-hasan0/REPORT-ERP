@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="assets/css/emb-entry.css">
+
+<div id="emb-report-module" class="container-fluid p-4">
+    <!-- Job Input Section -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3 border-bottom-0">
+            <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-edit me-2"></i>Job Entry</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-9">
+                    <label class="form-label">Job Numbers <span class="text-danger">*</span></label>
+                    <textarea id="jobNumbers" class="form-control" rows="3" required
+                        placeholder="Enter job numbers (comma or new line separated)"></textarea>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" id="addBtn">
+                        <i class="fas fa-plus me-2"></i>Add to Drafts
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Draft List Section -->
+    <div class="card booking-list-card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
+            <h5 class="card-title mb-0 text-nowrap">
+                <i class="fas fa-list text-primary me-2"></i>Active Drafts
+                <span id="draftCountBadge" class="badge bg-primary ms-2">0</span>
+            </h5>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="checkAll">
+                    <label class="form-check-label small fw-bold" for="checkAll">Select All</label>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" id="copyDraftsBtn">
+                    <i class="fas fa-copy me-1"></i>Copy
+                </button>
+                <button class="btn btn-sm btn-success" id="whatsappSelectedBtn">
+                    <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                </button>
+                <button class="btn btn-sm btn-primary" id="whatsappFullBtn">
+                    <i class="fab fa-whatsapp me-1"></i>Full Report
+                </button>
+                <button class="btn btn-warning btn-sm fw-bold" id="submitSelected" disabled>
+                    <i class="fas fa-cloud-upload-alt me-2"></i>Submit Jobs
+                </button>
+                <button class="btn btn-outline-danger btn-sm" id="deleteAllBtn">
+                    <i class="fas fa-trash-alt me-1"></i>Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 35px;"></th>
+                            <th style="width: 35px;"><i class="fas fa-hashtag me-1"></i>SL</th>
+                            <th style="width: 160px;"><i class="fas fa-briefcase me-1"></i>Job No</th>
+                            <th style="width: 150px;"><i class="fas fa-shopping-cart me-1"></i>Buyer</th>
+                            <th style="width: 140px;"><i class="fas fa-file-alt me-1"></i>WO #</th>
+                            <th style="width: 120px;"><i class="fas fa-clipboard-check me-1"></i>Status</th>
+                            <th style="width: 200px;"><i class="fas fa-sticky-note me-1"></i>Comments</th>
+                            <th class="text-center" style="width: 130px;"><i class="fas fa-cog me-1"></i>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="draftTable">
+                        <!-- Dynamic rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="submissionStatus" class="text-center py-2 small fw-bold text-primary"></div>
+        </div>
+    </div>
+</div>

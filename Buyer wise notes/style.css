@@ -1,0 +1,530 @@
+/* Professional Solid Black Theme */
+:root {
+    --primary-color: #10b981;
+    /* Emerald 500 */
+    --primary-hover: #059669;
+    /* Emerald 600 */
+    --secondary-color: #2513c9;
+    /* Slate 500 */
+
+    --bg-body: #000000;
+    /* Deep Black */
+    --bg-surface: #0a0a0a;
+    /* Almost Black */
+    --bg-surface-hover: #171717;
+    /* Dark Gray */
+
+    --text-main: #ffffff;
+    /* Pure White */
+    --text-muted: #a3a3a3;
+    /* Light Gray */
+    --border-color: #333333;
+    /* Dark Border */
+
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --indigo: #6366f1;
+}
+
+body {
+    background-color: var(--bg-body);
+    /* Strict Solid Black - No Gradients */
+    background-image: none !important;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+/* Solid Components (No Glass) */
+.glass-panel {
+    background: #000000;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 0 0 1px #222;
+    /* Sharp border */
+    padding: 24px;
+}
+
+.glass-modal {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 16px;
+    color: #ffffff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+}
+
+.glass-overlay {
+    background: rgba(0, 0, 0, 0.9);
+    /* Solid dimming */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    display: none;
+}
+
+/* Header Alignment Fix */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.brand-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Buttons - Solid Colors */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    padding: 8px 20px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary-gradient {
+    /* Renamed concept to solid, but keeping class name for HTML compat */
+    background: var(--primary-color);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary-gradient:hover {
+    background: var(--primary-hover);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-secondary {
+    /* Modal Cancel Button */
+    background: rgb(15, 129, 150);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: white;
+}
+
+.btn-danger {
+    /* Modal Delete Button */
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    border: none;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-glass {
+    background: #1a1a1a;
+    /* Solid dark grey instead of glass */
+    color: white;
+    border: 1px solid #333;
+}
+
+.btn-glass:hover {
+    background: #2a2a2a;
+    color: white;
+    border-color: #555;
+}
+
+.btn-close-custom {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.btn-close-custom:hover {
+    color: white;
+}
+
+/* Inputs - Dark Mode specific */
+.form-control,
+.form-select {
+    background-color: #111;
+    border: 1px solid var(--border-color);
+    color: white;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #1a1a1a;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+    color: white;
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: #555;
+}
+
+/* Stats Cards */
+.stat-card {
+    background: #0a0a0a;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-color);
+}
+
+.icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.bg-emerald-light {
+    background: #064e3b;
+}
+
+/* Solid Dark Emerald */
+.text-emerald {
+    color: #34d399;
+}
+
+.bg-indigo-light {
+    background: #312e81;
+}
+
+/* Solid Dark Indigo */
+.text-indigo {
+    color: #818cf8;
+}
+
+/* Table - Strict Solid Black */
+.table-container {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    padding-bottom: 1rem;
+    max-height: 70vh;
+}
+
+/* Override Bootstrap Table Vars */
+.table {
+    --bs-table-bg: #000000;
+    --bs-table-color: #ffffff;
+    --bs-table-hover-bg: #111111;
+    --bs-table-border-color: #333333;
+    color: #ffffff;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    /* Slightly tighter */
+    background-color: #000000 !important;
+}
+
+.custom-table thead th {
+    background-color: #030858 !important;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    color: #ffffff;
+    border: 1px solid #222;
+    /* Muted header for contrast with white body */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid #333;
+    padding: 16px;
+    white-space: nowrap;
+}
+
+.custom-table tbody tr {
+    background-color: #000000 !important;
+    transition: all 0.2s ease;
+    border: 1px solid #222;
+    /* Distinct rows */
+}
+
+.custom-table tbody tr:hover {
+    background-color: #0a0a0a !important;
+    /* Very subtle lift */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+    /* White glow */
+    z-index: 10;
+    position: relative;
+    border-color: var(--primary-color);
+}
+
+/* Highlight accent on hover */
+.custom-table tbody tr:hover td:first-child {
+    border-left-color: var(--primary-color);
+}
+
+.custom-table td {
+    background-color: #000000 !important;
+    padding: 18px 16px;
+    vertical-align: middle;
+    border: 1px solid #222;
+    /* Visible borders */
+    border: 1px solid #645c5c73;
+
+    color: #ffffff !important;
+    /* Force Pure White */
+    font-size: 0.95rem;
+}
+
+.custom-table td:first-child {
+    border-radius: 8px 0 0 8px;
+    border-left: 2px solid transparent;
+    font-weight: 600;
+    color: #ffffff !important;
+}
+
+.custom-table td:last-child {
+    border-radius: 0 8px 8px 0;
+    border-right: 1px solid #222;
+}
+
+/* Text Utility Overrides for Neon Pop */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success) !important;
+}
+
+.text-danger {
+    color: var(--danger) !important;
+}
+
+.text-muted {
+    color: #888 !important;
+}
+
+/* Buttons - Colorful & Vibrant */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    padding: 8px 20px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--indigo));
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary-gradient:hover {
+    background: linear-gradient(135deg, var(--primary-hover), #4f46e5);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.btn-secondary {
+    /* Modal Cancel Button */
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: white;
+}
+
+.btn-danger {
+    /* Modal Delete Button */
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    border: none;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-color: white;
+}
+
+.btn-close-custom {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.btn-close-custom:hover {
+    color: white;
+}
+
+/* Badge Styling */
+.badge {
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    letter-spacing: 0.03em;
+}
+
+.bg-secondary {
+    background: rgb(201, 0, 0) !important;
+    color: var(--text-main) !important;
+
+}
+
+/* Action Buttons in Table */
+.action-btn {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.03);
+    margin: 0 4px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.text-primary.action-btn:hover {
+    color: var(--primary-color) !important;
+}
+
+.text-danger.action-btn:hover {
+    color: var(--danger) !important;
+}
+
+/* Toast Notification */
+.toast-custom {
+    background: #027912;
+    color: white;
+    border: 1px solid #333;
+    border-left: 4px solid rgb(238, 0, 0);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Loader */
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.loader-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loader-content {
+    text-align: center;
+    color: #888;
+}
+
+.glass-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.9);
+    border: 1px solid #333;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #888;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.status-connected {
+    color: var(--success);
+}
+
+.status-error {
+    color: var(--danger);
+}

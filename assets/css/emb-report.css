@@ -1,0 +1,95 @@
+/* emb-report.css */
+
+/* Variables */
+:root {
+    --primary-blue: #0000FF;
+    --dark-blue: #1e3a8a;
+    --gold-brown: #92400e;
+    --danger-red: #dc2626;
+    --table-green: #dcfce7;
+    --border-gray: #e2e8f0;
+    --bg-light: #f8fafc;
+    --primary-gradient: linear-gradient(135deg, #2563eb, #1e40af);
+}
+
+#emb-report-module .container-main {
+    max-width: 100%;
+    padding: 0;
+}
+
+#emb-report-module .panel-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+#emb-report-module .panel-header {
+    background: #2563eb;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.table-gms {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table-gms thead th {
+    background-color: var(--table-green);
+    color: #064e3b;
+    font-weight: 700;
+    border: 1px solid rgba(128, 128, 128, 0.6);
+    padding: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.table-gms td {
+    vertical-align: middle;
+    padding: 0.75rem;
+    border: 1px solid rgba(128, 128, 128, 0.6);
+    white-space: nowrap;
+    /* Prevent wrapping by default */
+}
+
+/* Allow wrapping only for comments */
+.table-gms td:nth-child(6) {
+    white-space: normal;
+}
+
+.row-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.btn-gms-row {
+    font-size: 0.85rem;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: none;
+}
+
+.animate {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,90 @@
+<div class="welcome-snippet-container animate-fade-in">
+    <div class="card border-0 shadow-sm p-5 text-center bg-white"
+        style="border-radius: 20px; max-width: 650px; margin: 40px auto;">
+        <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle rounded-4 p-3 mb-3">
+                <i class="fas fa-hand-holding-heart fa-3x text-primary"></i>
+            </div>
+            <h2 class="fw-bold text-dark mb-2">Welcome to REPORT ERP</h2>
+            <p class="text-secondary lead">Your account setup is almost complete.</p>
+        </div>
+
+        <div class="alert bg-light border-0 py-4 px-4 text-start mb-4"
+            style="border-radius: 16px; border-left: 4px solid #3b82f6 !important;">
+            <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-lock text-primary me-2"></i>
+                <h6 class="mb-0 fw-bold text-dark">Security Verification Node</h6>
+            </div>
+            <p class="text-muted small mb-0">
+                Your account is currently in the <strong>Pending Approval</strong> state. For security reasons,
+                all new users must be verified by a system administrator before accessing specific modules.
+            </p>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="p-3 border rounded-4 bg-light-subtle h-100">
+                    <i class="fas fa-user-shield text-info mb-2 fs-4"></i>
+                    <h6 class="fw-bold mb-1 small text-dark">Step 1: Admin Review</h6>
+                    <p class="text-muted" style="font-size: 0.75rem;">Your identity and role are being verified by
+                        management.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded-4 bg-light-subtle h-100">
+                    <i class="fas fa-layer-group text-success mb-2 fs-4"></i>
+                    <h6 class="fw-bold mb-1 small text-dark">Step 2: Access Grant</h6>
+                    <p class="text-muted" style="font-size: 0.75rem;">Modules (Trims, EMB, etc.) will be enabled for
+                        your account.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-note mb-4 p-3 rounded-pill bg-primary-subtle d-inline-block px-4">
+            <span class="text-primary fw-semibold small">
+                <i class="fas fa-info-circle me-2"></i>Please contact <strong>Zahid (Admin)</strong> for immediate
+                activation.
+            </span>
+        </div>
+
+        <div class="text-muted small border-top pt-4">
+            <p class="mb-0">Logged in as: <span class="fw-bold text-dark" id="welcomeUserDisplay"></span></p>
+            <p class="opacity-75">Thank you for your patience.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .welcome-snippet-container {
+        padding: 2rem;
+        background-color: transparent;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .bg-light-subtle {
+        background-color: #f8fafc;
+    }
+</style>
+
+<script>
+    (function () {
+        const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        const display = document.getElementById('welcomeUserDisplay');
+        if (display) display.textContent = user.fullName || user.username || 'System User';
+    })();
+</script>

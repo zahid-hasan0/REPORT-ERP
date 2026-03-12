@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emblishment Job Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <div class="container-main">
+        <h1 class="app-title">Job Wise Emblishment Report</h1>
+
+        <!-- Entry Section -->
+        <div class="panel-card animate">
+            <div class="panel-header d-flex align-items-center collapsed" data-bs-toggle="collapse"
+                data-bs-target="#entryCollapse" aria-expanded="false">
+                <span>ENTRY PAGE</span>
+                <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+            </div>
+            <div class="collapse" id="entryCollapse">
+                <div class="panel-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small">Job No</label>
+                        <textarea id="jobNumbers" class="form-control" rows="6"
+                            placeholder="GMSC-25-08926, GMSC-25-08927"></textarea>
+                    </div>
+                    <button class="btn btn-gms btn-gms-add" id="addBtn">Add to Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Section -->
+        <div class="panel-card animate">
+            <div class="panel-header d-flex align-items-center justify-content-between flex-nowrap gap-3">
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <span>REPORT PAGE</span>
+                    <span id="draftCountBadge" class="badge bg-white text-primary rounded-pill">0</span>
+
+                    <div class="form-check form-switch ms-3 mb-0 d-flex align-items-center gap-2">
+                        <input class="form-check-input mt-0" type="checkbox" id="checkAll">
+                        <label class="form-check-label text-white fw-bold small" for="checkAll">CHECK ALL</label>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 flex-shrink-0 align-items-center">
+                    <button class="btn btn-gms btn-gms-submit fw-bold text-nowrap" id="submitSelected">
+                        Submit Selected to Database
+                    </button>
+                    <a href="report.html" class="btn btn-gms btn-gms-view fw-bold text-nowrap">View Database Reports
+                        →</a>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <button class="btn btn-gms btn-gms-outline fw-bold" id="copyDraftsBtn">
+                    <i class="fas fa-copy"></i> Copy Drafts
+                </button>
+                <button class="btn btn-whatsapp fw-bold px-3" id="whatsappSelectedBtn">
+                    <i class="fab fa-whatsapp"></i> Send Job
+                </button>
+                <button class="btn btn-primary fw-bold px-3" id="whatsappFullBtn">
+                    <i class="fab fa-whatsapp"></i> Send Full Report
+                </button>
+                <button class="btn btn-gms btn-gms-delete fw-bold ms-auto" id="deleteAllBtn">
+                    <i class="fas fa-trash"></i> Delete All
+                </button>
+            </div>
+
+            <div class="panel-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-gms mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><i class="fas fa-check-square"></i></th>
+                                <th style="width: 50px;">SL</th>
+                                <th style="width: 150px;">JOB NO</th>
+                                <th style="width: 180px;">BUYER</th>
+                                <th style="width: 150px;">WO #</th>
+                                <th style="width: 130px;">STATUS</th>
+                                <th>COMMENTS</th>
+                                <th class="text-end" style="width: 180px;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="draftTable"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="submissionStatus" class="p-3 small fw-bold text-primary text-end"></div>
+        </div>
+
+        <footer class="footer-gms">
+            © 2025 Emblishment Job Report all rights reserved mis-13
+        </footer>
+    </div>
+
+    <!-- WhatsApp Modal -->
+    <div class="modal fade" id="whatsappModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="fw-bold"><i class="fab fa-whatsapp text-success me-2"></i>Select Contact</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div id="waContactList" class="list-group list-group-flush mb-4"></div>
+                    <button class="btn btn-primary w-100 fw-bold" id="waFinalSendBtn">Send Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Full Report Modal -->
+    <div class="modal fade" id="whatsappFullModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="fw-bold"><i class="fab fa-whatsapp text-success me-2"></i>Full Report Contacts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="small text-muted mb-4 text-center">Send all data to these contacts</p>
+                    <div id="waFullContactList" class="list-group list-group-flush mb-4"></div>
+                    <button class="btn btn-whatsapp w-100 fw-bold" id="waFullFinalSendBtn">Send Full Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 text-center">
+                    <h5 class="fw-bold mb-3">Are you sure?</h5>
+                    <p id="confirmMessage" class="small text-muted mb-4"></p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-light flex-grow-1" data-bs-dismiss="modal">No</button>
+                        <button class="btn btn-primary flex-grow-1" id="confirmBtnAction">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast align-items-center text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body fw-bold" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

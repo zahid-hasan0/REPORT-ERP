@@ -1,0 +1,165 @@
+<!-- pages/booking.html -->
+<link rel="stylesheet" href="assets/css/booking.css">
+
+<div class="booking-page-container">
+    <!-- Header -->
+    <!-- <div class="erp-header">
+        <h2>Booking Entry Page</h2>
+        <p class="text-muted small mb-0">Manage and track all booking entries efficiently.</p>
+    </div> -->
+
+    <!-- Booking Entry Card -->
+    <div class="erp-card">
+        <div class="erp-card-header">
+            <h5>Booking Entry Form</h5>
+        </div>
+        <div class="erp-card-body">
+            <form id="bookingForm" class="row g-3">
+                <input type="hidden" id="editId">
+
+                <!-- Row 1 -->
+                <div class="col-md-3">
+                    <label class="erp-form-label">Booking Number <span class="text-danger">*</span></label>
+                    <input type="text" class="erp-input" id="bookingNo" required placeholder="Enter Booking No">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Customer Name <span class="text-danger">*</span></label>
+                    <select class="erp-input" id="customer" required>
+                        <option value="">-- Select Customer --</option>
+                        <option value="GMS Composite">GMS Composite</option>
+                        <option value="GMS Textile">GMS Textile</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Buyer <span class="text-danger">*</span></label>
+                    <div class="dropdown custom-search-dropdown" id="buyerDropdownContainer">
+                        <button class="erp-input text-start d-flex justify-content-between align-items-center"
+                            type="button" id="buyerDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="selectedBuyerLabel">-- Select Buyer --</span>
+                            <i class="fas fa-chevron-down small opacity-50"></i>
+                        </button>
+                        <div class="dropdown-menu w-100 p-0 shadow-lg border-0" aria-labelledby="buyerDropdownBtn"
+                            style="border-radius: 8px;">
+                            <div class="p-2 border-bottom sticky-top bg-white">
+                                <input type="text" class="form-control form-control-sm border-0 bg-light"
+                                    id="buyerSearchInput" placeholder="Search buyer..." autocomplete="off">
+                            </div>
+                            <div id="buyerOptionsList" style="max-height: 250px; overflow-y: auto;">
+                                <!-- Options populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="buyer" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Booking Date <span class="text-danger">*</span></label>
+                    <input type="date" class="erp-input" id="bookingDate" required>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-md-3">
+                    <label class="erp-form-label">Item Description</label>
+                    <input type="text" class="erp-input" id="item" placeholder="Enter item description">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Check Status</label>
+                    <select class="erp-input" id="checkStatus" required>
+                        <option value="Unverified">Unverified</option>
+                        <option value="Verified">Verified</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Check Date <small class="text-muted">(Optional)</small></label>
+                    <input type="date" class="erp-input" id="checkDate">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="erp-form-label">Remarks <small class="text-muted">(Optional)</small></label>
+                    <input type="text" class="erp-input" id="remarks" placeholder="Additional notes">
+                </div>
+
+                <div class="col-12 erp-actions">
+                    <button type="submit" class="btn-erp-primary">
+                        Save Booking
+                    </button>
+                    <button type="button" class="btn-erp-secondary" onclick="resetForm()">
+                        Clear Form
+                    </button>
+                </div>
+
+                <!-- Import Section -->
+                <div class="col-12 mt-2">
+                    <div class="erp-import-row">
+                        <div class="mb-2 mb-md-0">
+                            <strong class="d-block">Import Master Excel</strong>
+                            <span class="text-muted small">Bulk upload booking records via Excel file.</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <input type="file" id="excelFile" class="form-control form-control-sm" accept=".xlsx,.xls"
+                                style="max-width: 200px;">
+                            <button class="btn btn-dark btn-sm px-3" onclick="importExcel()">Import</button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="downloadTemplate()"
+                                title="Download Template">
+                                Download Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Ledger (Restored Table Design) -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom-0">
+            <h5 class="fw-bold mb-0 text-primary">Booking Data</h5>
+            <div class="d-flex gap-2 align-items-center">
+                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search..."
+                    style="width: 200px;">
+                <input type="date" id="fromDate" class="form-control form-control-sm" style="width: 130px;">
+                <input type="date" id="toDate" class="form-control form-control-sm" style="width: 130px;">
+                <select id="tableBuyerFilter" class="form-select form-select-sm" style="width: 150px;">
+                    <option value="all">All Buyers</option>
+                </select>
+                <button id="filterBtn" class="btn btn-primary btn-sm">Filter</button>
+                <button id="clearSearchBtn" class="btn btn-outline-secondary btn-sm" onclick="clearSearch()"
+                    title="Clear Filters">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Booking No</th>
+                            <th>Customer</th>
+                            <th>Buyer</th>
+                            <th>Item</th>
+                            <th class="text-center">Booking Date</th>
+                            <th class="text-center">Check Status</th>
+                            <th class="text-center">Check Date</th>
+                            <th>Remarks</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTable">
+                        <tr>
+                            <td colspan="9" class="text-center py-4 text-muted">Loading data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="pagination">
+                <!-- Pagination populated via JS -->
+            </div>
+        </div>
+    </div>
+</div>

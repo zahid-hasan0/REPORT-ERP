@@ -1,0 +1,243 @@
+<style>
+    #buyer-notes-module .main-container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    #buyer-notes-module .card-header-erp {
+        background: #2563eb;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px 8px 0 0;
+    }
+
+    #buyer-notes-module .stats-card-light {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: transform 0.2s;
+    }
+
+    #buyer-notes-module .stats-card-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    #buyer-notes-module .icon-box-light {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    #buyer-notes-module .table-erp-light thead th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    #buyer-notes-module .table-erp-light tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    #buyer-notes-module .entry-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 10000;
+        display: none;
+        /* Hidden by default */
+        align-items: center;
+        justify-content: center;
+    }
+
+    #buyer-notes-module .entry-overlay.active {
+        display: flex !important;
+        /* Visible when active */
+    }
+
+    #buyer-notes-module .entry-card {
+        background: white;
+        width: 90%;
+        /* Responsive width */
+        max-width: 600px;
+        border-radius: 12px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: auto;
+        /* Fallback centering */
+        position: relative;
+    }
+</style>
+
+<div id="buyer-notes-module">
+    <div class="p-3">
+        <!-- Header & Action -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Buyer Essential Notes</h4>
+                <p class="text-muted small mb-0">Management of buyer-specific logic and TPC references</p>
+            </div>
+            <button class="btn btn-primary px-4 fw-bold" id="addNewBtn">
+                <i class="fas fa-plus me-2"></i>New Note
+            </button>
+        </div>
+
+        <!-- Stats row -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="stats-card-light">
+                    <div class="icon-box-light bg-primary-subtle text-primary">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Total Notes</div>
+                        <h4 class="fw-bold mb-0" id="totalItems">0</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card-light">
+                    <div class="icon-box-light bg-success-subtle text-success">
+                        <i class="fas fa-user-tag"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Active Buyers</div>
+                        <h4 class="fw-bold mb-0" id="totalBuyers">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-3">
+                <div class="row g-2">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i
+                                    class="fas fa-search text-muted"></i></span>
+                            <input type="text" class="form-control border-start-0" id="searchInput"
+                                placeholder="Search by buyer, code, or logic...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="buyerFilter">
+                            <option value="">All Buyers</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover table-erp-light mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Buyer</th>
+                            <th>Description</th>
+                            <th>TPC Code</th>
+                            <th>Logic/Ref</th>
+                            <th>Details</th>
+                            <th>Comments</th>
+                            <th>Entry Info</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="fas fa-spinner fa-spin me-2 text-primary"></i>Loading notes...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Entry Form - Hidden by default -->
+    <div id="entryPage" class="entry-overlay" style="display: none;">
+        <div class="entry-card">
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+                <h5 class="mb-0 fw-bold" id="formTitle">Add New Note</h5>
+                <button class="btn-close" id="closeFormBtn"></button>
+            </div>
+            <div class="p-4">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Buyer Name *</label>
+                        <input type="text" class="form-control" id="buyerName">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Description</label>
+                        <textarea class="form-control" id="description" rows="2"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">TPC Code</label>
+                        <input type="text" class="form-control" id="tpcLogic">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">Logic Reference</label>
+                        <input type="text" class="form-control" id="logicCode">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Detailed Logic</label>
+                        <textarea class="form-control" id="logicDescription" rows="2"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold">Remarks</label>
+                        <textarea class="form-control" id="comments" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 border-top bg-light text-end">
+                <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary px-4" id="saveBtn">
+                    <span id="saveButtonText">Save Changes</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation -->
+<div class="modal fade" id="deleteNoteModal" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-4 text-center">
+                <div class="text-danger mb-3"><i class="fas fa-trash-alt fa-3x"></i></div>
+                <h5 class="fw-bold">Delete Note?</h5>
+                <p class="text-muted small">This action cannot be undone.</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light border flex-grow-1" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger flex-grow-1" onclick="executeDeleteNote()">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

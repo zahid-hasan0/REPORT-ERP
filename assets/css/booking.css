@@ -1,0 +1,288 @@
+/* booking.css - Premium Enterprise ERP Aesthetic */
+
+:root {
+    --erp-primary: #2563eb;
+    --erp-primary-hover: #1d4ed8;
+    --erp-bg-page: transparent;
+    --erp-bg-card: #ffffff;
+    --erp-border: #e2e8f0;
+    --erp-text-main: #334155;
+    --erp-text-muted: #64748b;
+    --erp-input-bg: #f8fafc;
+    --erp-input-border: #cbd5e1;
+    --erp-input-focus: #3b82f6;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+.booking-page-container {
+    padding: 1rem 1.5rem;
+    background-color: var(--erp-bg-page);
+    min-height: 100vh;
+}
+
+/* Page Header */
+.erp-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--erp-border);
+}
+
+.erp-header h2 {
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+/* Premium ERP Card */
+.erp-card {
+    background: var(--erp-bg-card);
+    border: 1px solid var(--erp-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.erp-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.025);
+}
+
+.erp-card-header {
+    padding: 0.8rem 1.25rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--erp-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.erp-card-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--erp-primary);
+}
+
+.erp-card-header h5 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #0f172a;
+    letter-spacing: 0.2px;
+}
+
+.erp-card-body {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Form Styling - Dense & Professional */
+.erp-form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.erp-input {
+    width: 100%;
+    border: 1px solid var(--erp-input-border);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    color: var(--erp-text-main);
+    transition: all 0.2s ease;
+    background-color: var(--erp-input-bg);
+}
+
+.erp-input:focus {
+    outline: none;
+    border-color: var(--erp-input-focus);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    background-color: #ffffff;
+}
+
+.erp-input::placeholder {
+    color: #94a3b8;
+}
+
+/* Action Section */
+.erp-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.btn-erp-primary {
+    background-color: var(--erp-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn-erp-primary:hover {
+    background-color: var(--erp-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+}
+
+.btn-erp-secondary {
+    background-color: #ffffff;
+    color: #475569;
+    border: 1px solid var(--erp-input-border);
+    padding: 0.75rem 1.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.btn-erp-secondary:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+/* Import Row */
+.erp-import-row {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+}
+
+.erp-import-row:hover {
+    border-color: var(--erp-primary);
+    background-color: #f1f5f9;
+}
+
+/* Professional Table Styling (Restored) */
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table {
+    border: 1px solid #dee2e6;
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: var(--dynamic-topbar-bg, #0f172a);
+    color: var(--dynamic-sidebar-text, #ffffff);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    vertical-align: middle;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #334155;
+    background-color: #ffffff;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Badge Styling (Restored) */
+.badge-status-verified {
+    background-color: #ecfdf5;
+    /* Emerald-50 */
+    color: #059669;
+    /* Emerald-600 */
+    border: 1px solid #10b981;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-status-unverified {
+    background-color: #fff1f2;
+    /* Rose-50 */
+    color: #e11d48;
+    /* Rose-600 */
+    border: 1px solid #fb7185;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Booking No Badge - Follows Active Theme */
+.booking-id-badge {
+    background-color: var(--dynamic-primary, #0c4dda);
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.table-hover tr:hover .booking-id-badge {
+    background-color: var(--dynamic-primary-hover, #0b45c4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Pagination Styles */
+#pagination {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.text-truncate-pro {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.col-item {
+    max-width: 200px;
+}
+
+.col-buyer {
+    max-width: 15rem;
+}
+
+.col-remarks {
+    max-width: 150px;
+}
