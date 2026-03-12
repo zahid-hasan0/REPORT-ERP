@@ -100,7 +100,7 @@ function renderItems(itemsToRender) {
     if (ui.totalItems) ui.totalItems.textContent = itemsToRender.length;
 
     if (itemsToRender.length === 0) {
-        ui.itemsTableBody.innerHTML = '<tr><td colspan="8" class="text-center py-5 text-muted">No items found.</td></tr>';
+        ui.itemsTableBody.innerHTML = '<tr><td colspan="9" class="text-center py-5 text-muted"><i class="fas fa-folder-open fa-3x mb-3 opacity-25"></i><br>No buyer notes found for the current selection.</td></tr>';
         return;
     }
 
@@ -110,24 +110,34 @@ function renderItems(itemsToRender) {
         const statusBadge = isPending ? '<span class="badge bg-warning text-dark ms-2"><i class="fas fa-clock me-1"></i>Delete Request</span>' : '';
 
         return `
-        <tr class="${rowClass}">
-            <td>${i + 1}</td>
-            <td><strong>${item.buyerName || 'N/A'}</strong> ${statusBadge}</td>
-            <td>${item.description || '-'}</td>
-            <td>${item.tpcLogic || '-'}</td>
-            <td><span class="badge bg-light text-dark border">${item.logicCode || '-'}</span></td>
-            <td>${item.logicDescription || '-'}</td>
-            <td>${item.comments || '-'}</td>
+        <tr class="${rowClass}" style="animation-delay: ${i * 0.05}s">
+            <td class="ps-4 text-muted fw-bold">${i + 1}</td>
             <td>
-                <div class="d-flex flex-column" style="line-height: 1.2;">
-                    <span class="text-muted" style="font-size: 0.75rem;">${item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</span>
-                    <span class="fw-bold text-dark" style="font-size: 0.8rem;">${item.creatorName || (item.createdBy === 'admin' ? 'Admin' : 'Admin')}</span>
+                <div class="d-flex align-items-center">
+                    <div class="avatar-circle-sm bg-primary text-white me-3 d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; border-radius: 8px; font-size: 0.9rem; flex-shrink: 0;">
+                        ${(item.buyerName || 'N').charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark">${item.buyerName || 'N/A'}</div>
+                        ${statusBadge}
+                    </div>
                 </div>
             </td>
-            <td class="text-center">
-                <div class="d-flex gap-1 justify-content-center">
-                    <button class="btn btn-sm btn-outline-primary" onclick="editItemNote('${item.id}')" ${isPending ? 'disabled' : ''}><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteNote('${item.id}')" ${isPending ? 'disabled' : ''}><i class="fas fa-trash"></i></button>
+            <td><div>${item.description || '-'}</div></td>
+            <td><code class="text-primary fw-bold" style="font-size: 0.85rem;">${item.tpcLogic || '-'}</code></td>
+            <td><span class="badge bg-light text-primary border border-primary border-opacity-25 px-2 py-1">${item.logicCode || '-'}</span></td>
+            <td><div>${item.logicDescription || '-'}</div></td>
+            <td><div>${item.comments || '-'}</div></td>
+            <td>
+                <div class="d-flex flex-column" style="line-height: 1.3;">
+                    <span class="fw-bold text-dark" style="font-size: 0.85rem;">${item.creatorName || (item.createdBy === 'admin' ? 'System Admin' : 'Admin')}</span>
+                    <span class="text-muted" style="font-size: 0.75rem;">${item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}</span>
+                </div>
+            </td>
+            <td class="text-center pe-4">
+                <div class="d-flex gap-2 justify-content-center">
+                    <button class="btn btn-sm btn-primary" onclick="editItemNote('${item.id}')" ${isPending ? 'disabled' : ''} title="Edit Note" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px;"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="confirmDeleteNote('${item.id}')" ${isPending ? 'disabled' : ''} title="Delete Note" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px;"><i class="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>
@@ -157,8 +167,8 @@ function showEntryPage(itemId) {
         const item = items.find(i => i.id === itemId);
         if (item) {
             editingItemId = itemId;
-            ui.formTitle.textContent = 'Edit Item';
-            ui.saveButtonText.textContent = 'Update Item';
+            ui.formTitle.textContent = 'Edit Buyer Intelligence';
+            ui.saveButtonText.textContent = 'Update Intelligence';
             ui.buyerName.value = item.buyerName || '';
             ui.description.value = item.description || '';
             ui.tpcLogic.value = item.tpcLogic || '';
@@ -180,8 +190,8 @@ function resetForm() {
     editingItemId = null;
     const ui = getUI();
     if (!ui.buyerName) return;
-    ui.formTitle.textContent = 'Add New Item';
-    ui.saveButtonText.textContent = 'Save Item';
+    ui.formTitle.textContent = 'Add Buyer Intelligence';
+    ui.saveButtonText.textContent = 'Validate & Save';
     ui.buyerName.value = '';
     ui.description.value = '';
     ui.tpcLogic.value = '';
