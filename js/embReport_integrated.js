@@ -4,6 +4,7 @@ import { showToast } from './toast.js';
 
 let drafts = [];
 let fetchedReports = [];
+let modalContext = []; // stores records to be sent via currently open modal
 let currentPage = 1;
 const ITEMS_PER_PAGE = 25;
 
@@ -85,6 +86,9 @@ function setupEventListeners() {
     window.changePage = changePage;
     window.filterTable = filterTable;
     window.clearSearchEmb = clearSearchEmb;
+    window.openWhatsappModal = openWhatsappModal;
+    window.openWhatsappFullModal = openWhatsappFullModal;
+    window.toggleDbRowSelection = toggleDbRowSelection;
 
     // Global WhatsApp modal listeners (these usually exist in index.html or we reuse them)
     const waFinalBtn = document.getElementById("waFinalSendBtn");
@@ -98,13 +102,16 @@ function loadDrafts() {
     try {
         const stored = JSON.parse(localStorage.getItem('jobReports_v2') || '[]');
         drafts = stored.filter(d => d && d.id && d.jobNo);
+        window.drafts = drafts; // Expose to window
     } catch (e) {
         drafts = [];
+        window.drafts = [];
     }
 }
 
 function saveDrafts() {
     localStorage.setItem('jobReports_v2', JSON.stringify(drafts));
+    window.drafts = drafts; // Keep window ref in sync
 }
 
 function handleAddDrafts() {
@@ -137,6 +144,7 @@ function handleAddDrafts() {
     if (addedCount > 0) {
         ui.jobInput.value = "";
         saveDrafts();
+        window.drafts = drafts; // Expose to window for row-level buttons
         renderDrafts();
         showToast(`Added ${addedCount} new jobs.`);
     }
@@ -173,6 +181,9 @@ function renderDrafts() {
             <td>${isInput('comments', d, isEditable)}</td>
             <td class="text-end">
                 <div class="row-actions">
+                    <button class="btn btn-sm btn-outline-success border-0 px-2" title="WhatsApp Message" onclick="openWhatsappModal(drafts.find(d => d.id === '${d.id}'))">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
                     <button class="btn btn-sm ${isEditable ? 'btn-success' : 'btn-primary'} btn-gms-row" onclick="${isEditable ? 'saveRow' : 'editRow'}('${d.id}')">
                         ${isEditable ? 'Save' : 'Edit'}
                     </button>
@@ -214,6 +225,14 @@ export function toggleRowSelection(id) {
         draft.selected = !draft.selected;
         saveDrafts();
         renderDrafts();
+    }
+}
+
+export function toggleDbRowSelection(id) {
+    const report = fetchedReports.find(r => r.id === id);
+    if (report) {
+        report.selected = !report.selected;
+        renderRecords();
     }
 }
 
@@ -335,6 +354,7 @@ async function loadDatabaseReports() {
         const q = query(collection(db, path), orderBy("submittedAt", "desc"));
         const snapshot = await getDocs(q);
         fetchedReports = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        window.fetchedReports = fetchedReports; // Expose to window for row-level buttons
 
         currentPage = 1;
         renderStats();
@@ -386,10 +406,12 @@ function renderRecords() {
 
     pageData.forEach((r, idx) => {
         const tr = document.createElement("tr");
+        if (r.selected) tr.classList.add("table-active");
         const date = r.submittedAt ? new Date(r.submittedAt).toLocaleDateString('en-GB') : '-';
         const isEditable = r.editable === true;
 
         tr.innerHTML = `
+            <td class="text-center"><input type="checkbox" class="form-check-input" ${r.selected ? 'checked' : ''} onclick="toggleDbRowSelection('${r.id}')"></td>
             <td>${start + idx + 1}</td>
             <td class="fw-bold text-primary">${r.jobNo}</td>
             <td>${isDbInput('buyer', r, isEditable)}</td>
@@ -399,6 +421,9 @@ function renderRecords() {
             <td class="small text-secondary">${date}</td>
             <td class="text-end">
                 <div class="row-actions">
+                    <button class="btn btn-sm btn-outline-success border-0 px-2" title="WhatsApp Message" onclick="openWhatsappModal(fetchedReports.find(r => r.id === '${r.id}'))">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
                     <button class="btn btn-sm ${isEditable ? 'btn-success' : 'btn-outline-primary'} btn-gms-row" onclick="${isEditable ? 'saveDbRow' : 'editDbRow'}('${r.id}')">
                         ${isEditable ? 'Save' : 'Edit'}
                     </button>
@@ -524,9 +549,21 @@ async function loadWhatsAppContacts() {
     }
 }
 
-async function openWhatsappModal() {
-    const selected = drafts.filter(d => d.selected);
-    if (selected.length === 0) return showToast("Select jobs first.", "warning");
+async function openWhatsappModal(singleRecord = null) {
+    const isReportPage = !!document.getElementById('stat-total-reports');
+
+    // Fix: If called from an onclick listener directly, singleRecord might be the Event object.
+    // We only treat it as a single record if it has a jobNo property.
+    const isActualRecord = singleRecord && typeof singleRecord === 'object' && 'jobNo' in singleRecord;
+
+    if (isActualRecord) {
+        modalContext = [singleRecord];
+    } else {
+        // Bulk selection: Use drafts or reports based on current page
+        modalContext = isReportPage ? fetchedReports.filter(r => r.selected) : drafts.filter(d => d.selected);
+    }
+
+    if (modalContext.length === 0) return showToast("Select or click a job first.", "warning");
 
     await loadWhatsAppContacts();
 
@@ -535,12 +572,13 @@ async function openWhatsappModal() {
         list.innerHTML = WAS_CONTACTS.map((c, i) => `
             <label class="list-group-item d-flex align-items-center gap-3 py-3 border-0 rounded mb-2 bg-light bg-opacity-50" style="cursor: pointer;">
                 <input class="form-check-input flex-shrink-0" type="radio" name="waContact" value="${c.number}" ${i === 0 ? 'checked' : ''}>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-success bg-opacity-10 text-success p-2 rounded-circle"><i class="fas fa-user"></i></div>
-                    <div class="fw-bold">${c.name}</div>
+                <div class="flex-grow-1">
+                    <div class="fw-bold text-dark">${c.name}</div>
+                    <div class="small text-muted">${c.number}</div>
                 </div>
+                <i class="fab fa-whatsapp text-success fs-4"></i>
             </label>
-        `).join("");
+        `).join('');
     }
 
     new bootstrap.Modal(document.getElementById('whatsappModal')).show();
@@ -548,23 +586,33 @@ async function openWhatsappModal() {
 
 async function sendWhatsAppMessage() {
     console.log("📨 Preparing to send individual WhatsApp message...");
-    const selected = drafts.filter(d => d.selected);
+    if (modalContext.length === 0) return showToast("No records selected.", "warning");
+
     const radio = document.querySelector('input[name="waContact"]:checked');
     if (!radio) return showToast("Select a contact.", "warning");
 
     const number = radio.value;
-    const text = await getMessageText(selected, true);
+    const text = await getMessageText(modalContext, true);
     console.log("Final Message Text:", text);
 
-    window.open(`https://api.whatsapp.com/send?phone=88${number}&text=${encodeURIComponent(text)}`, '_blank');
+    // Using wa.me for better mobile support
+    const url = `https://wa.me/88${number}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
     bootstrap.Modal.getInstance(document.getElementById('whatsappModal')).hide();
 }
 
 async function openWhatsappFullModal() {
     const isReportPage = !!document.getElementById('stat-total-reports');
-    const records = isReportPage ? fetchedReports : drafts.filter(d => d.selected);
+    let records = isReportPage ? fetchedReports : drafts.filter(d => d.selected);
 
-    if (records.length === 0) return showToast("No records to report.", "warning");
+    // USER REQUIREMENT: Full report should include jobs with WO or non-pending status
+    modalContext = records.filter(r => {
+        const hasWO = r.wo && r.wo.trim() !== "" && r.wo !== "-";
+        const isNotPending = (r.status || "Pending").toLowerCase() !== "pending";
+        return hasWO || isNotPending;
+    });
+
+    if (modalContext.length === 0) return showToast("No completed records (with WO/Approved) to report.", "warning");
 
     await loadWhatsAppContacts();
 
@@ -573,12 +621,13 @@ async function openWhatsappFullModal() {
         list.innerHTML = FULL_REPORT_CONTACTS.map((c, i) => `
             <label class="list-group-item d-flex align-items-center gap-3 py-3 border-0 rounded mb-2 bg-light bg-opacity-50" style="cursor: pointer;">
                 <input class="form-check-input flex-shrink-0" type="radio" name="waFullContact" value="${c.number}" ${i === 0 ? 'checked' : ''}>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-circle"><i class="fas fa-user-check"></i></div>
-                    <div class="fw-bold">${c.name}</div>
+                <div class="flex-grow-1">
+                    <div class="fw-bold text-dark">${c.name}</div>
+                    <div class="small text-muted">${c.number}</div>
                 </div>
+                <i class="fab fa-whatsapp text-primary fs-4"></i>
             </label>
-        `).join("");
+        `).join('');
     }
 
     new bootstrap.Modal(document.getElementById('whatsappFullModal')).show();
@@ -586,22 +635,18 @@ async function openWhatsappFullModal() {
 
 async function sendWhatsAppFullReport() {
     console.log("📨 Preparing to send full WhatsApp report...");
+    if (modalContext.length === 0) return showToast("No records to report.", "warning");
+
     const radio = document.querySelector('input[name="waFullContact"]:checked');
     if (!radio) return showToast("Select a contact.", "warning");
 
-    const isReportPage = !!document.getElementById('stat-total-reports');
-    let records = isReportPage ? fetchedReports : drafts.filter(d => d.selected);
-
-    // USER REQUIREMENT: Full report should NOT include "Pending" items
-    records = records.filter(r => (r.status || "Pending").toLowerCase() !== "pending");
-
-    if (records.length === 0) return showToast("No non-pending records to report.", "warning");
-
     const number = radio.value;
-    const text = await getMessageText(records, false);
+    const text = await getMessageText(modalContext, false);
     console.log("Final Report Text:", text);
 
-    window.open(`https://api.whatsapp.com/send?phone=88${number}&text=${encodeURIComponent(text)}`, '_blank');
+    // Using wa.me for better mobile support
+    const url = `https://wa.me/88${number}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
     bootstrap.Modal.getInstance(document.getElementById('whatsappFullModal')).hide();
 }
 
@@ -609,57 +654,52 @@ async function sendWhatsAppFullReport() {
  * Generate Message Text based on Current Template from shared settings
  */
 async function getMessageText(selected, isSelectedOnly = true) {
+    if (isSelectedOnly) {
+        // ULTRA RELIABLE FORMAT: Using \r\n and explicit string building
+        let text = "Need Emblishment\r\n\r\n";
+        selected.forEach(d => {
+            text += "• " + (d.jobNo || "").trim() + " " + (d.buyer || "").trim() + "\r\n";
+        });
+        return text.trim();
+    }
+
+    // For Full Report: Use Template system
     const { getSystemSettings } = await import('./systemSettings.js');
     const settings = await getSystemSettings();
     const templates = settings.whatsapp_templates || {};
+    const template = templates['emb_full_report'] || "📦 EMB STATUS REPORT ({date})\n━━━━━━━━━━━━━━━━━━━━━━\n{index}. JOB: {jobNo} ━━ {buyer} ━━ {wo} ━━ {status} ━━ {comments}";
 
-    const templateKey = isSelectedOnly ? 'emb_send_selected' : 'emb_full_report';
-    const template = templates[templateKey];
-
-    console.log(`🔍 Using Template [${templateKey}]:`, template);
-
-    if (!template) {
-        return getLegacyMessageText(selected, isSelectedOnly);
-    }
-
-    let finalMessage = "";
     let header = "";
     let rowTemplate = template;
-
-    // Smart split: Everything before the first line containing a row-variable is considered a Header
     const rowVars = ['{jobNo}', '{buyer}', '{wo}', '{status}', '{comments}', '{index}'];
     const lines = template.split('\n');
-    const rowIndex = lines.findIndex(line => rowVars.some(v => line.includes(v)));
+    let rowIndex = lines.findIndex(line => rowVars.some(v => line.includes(v)));
 
     if (rowIndex !== -1 && rowIndex > 0) {
         header = lines.slice(0, rowIndex).join('\n') + '\n';
         rowTemplate = lines.slice(rowIndex).join('\n');
     }
 
-    // Process Header once
-    finalMessage = header.replaceAll(/{date}/g, new Date().toLocaleDateString('en-GB'));
+    let finalMessage = "";
+    if (header) {
+        finalMessage = header.replaceAll(/{date}/g, new Date().toLocaleDateString('en-GB'));
+        if (!finalMessage.endsWith('\n')) finalMessage += '\n';
+    }
 
+    const rows = [];
     selected.forEach((d, idx) => {
         let row = rowTemplate;
         row = row.replaceAll(/{index}/g, idx + 1);
         row = row.replaceAll(/{jobNo}/g, d.jobNo || "");
         row = row.replaceAll(/{buyer}/g, d.buyer || "");
-        // Message Report (Individual Send Selected): Only Job Number and Buyer Name
-        if (templateKey === 'emb_send_selected') {
-            row = row.replaceAll(/{wo}/g, "").replaceAll(/{status}/g, "").replaceAll(/{comments}/g, "");
-            // Clean up potentially remaining separators if user added them in template
-            row = row.replace(/━━/g, "").replace(/\s+/g, " ").trim();
-        } else {
-            // Full Report: All information
-            row = row.replaceAll(/{wo}/g, d.wo || "");
-            row = row.replaceAll(/{status}/g, (d.status || "Pending").toUpperCase());
-            row = row.replaceAll(/{comments}/g, d.comments || "");
-        } 
-        
+        row = row.replaceAll(/{wo}/g, d.wo || "");
+        row = row.replaceAll(/{status}/g, (d.status || "Pending").toUpperCase());
+        row = row.replaceAll(/{comments}/g, d.comments || "");
         row = row.replaceAll(/{date}/g, new Date().toLocaleDateString('en-GB'));
-        finalMessage += row + "\n";
+        rows.push(row.trim());
     });
 
+    finalMessage += rows.join('\r\n');
     return finalMessage.trim();
 }
 
@@ -685,4 +725,4 @@ async function handleCopyDrafts() {
 
     const text = await getMessageText(selected, true);
     navigator.clipboard.writeText(text).then(() => showToast("Copied!"));
-}
+}
