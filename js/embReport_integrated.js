@@ -590,7 +590,12 @@ async function sendWhatsAppFullReport() {
     if (!radio) return showToast("Select a contact.", "warning");
 
     const isReportPage = !!document.getElementById('stat-total-reports');
-    const records = isReportPage ? fetchedReports : drafts.filter(d => d.selected);
+    let records = isReportPage ? fetchedReports : drafts.filter(d => d.selected);
+
+    // USER REQUIREMENT: Full report should NOT include "Pending" items
+    records = records.filter(r => (r.status || "Pending").toLowerCase() !== "pending");
+
+    if (records.length === 0) return showToast("No non-pending records to report.", "warning");
 
     const number = radio.value;
     const text = await getMessageText(records, false);
@@ -618,16 +623,39 @@ async function getMessageText(selected, isSelectedOnly = true) {
     }
 
     let finalMessage = "";
-    // Removed hardcoded header to allow full control via templates in settings page.
+    let header = "";
+    let rowTemplate = template;
+
+    // Smart split: Everything before the first line containing a row-variable is considered a Header
+    const rowVars = ['{jobNo}', '{buyer}', '{wo}', '{status}', '{comments}', '{index}'];
+    const lines = template.split('\n');
+    const rowIndex = lines.findIndex(line => rowVars.some(v => line.includes(v)));
+
+    if (rowIndex !== -1 && rowIndex > 0) {
+        header = lines.slice(0, rowIndex).join('\n') + '\n';
+        rowTemplate = lines.slice(rowIndex).join('\n');
+    }
+
+    // Process Header once
+    finalMessage = header.replaceAll(/{date}/g, new Date().toLocaleDateString('en-GB'));
 
     selected.forEach((d, idx) => {
-        let row = template;
+        let row = rowTemplate;
         row = row.replaceAll(/{index}/g, idx + 1);
         row = row.replaceAll(/{jobNo}/g, d.jobNo || "");
         row = row.replaceAll(/{buyer}/g, d.buyer || "");
-        row = row.replaceAll(/{wo}/g, d.wo || "");
-        row = row.replaceAll(/{status}/g, (d.status || "Pending").toUpperCase());
-        row = row.replaceAll(/{comments}/g, d.comments || "");
+        // Message Report (Individual Send Selected): Only Job Number and Buyer Name
+        if (templateKey === 'emb_send_selected') {
+            row = row.replaceAll(/{wo}/g, "").replaceAll(/{status}/g, "").replaceAll(/{comments}/g, "");
+            // Clean up potentially remaining separators if user added them in template
+            row = row.replace(/━━/g, "").replace(/\s+/g, " ").trim();
+        } else {
+            // Full Report: All information
+            row = row.replaceAll(/{wo}/g, d.wo || "");
+            row = row.replaceAll(/{status}/g, (d.status || "Pending").toUpperCase());
+            row = row.replaceAll(/{comments}/g, d.comments || "");
+        } 
+        
         row = row.replaceAll(/{date}/g, new Date().toLocaleDateString('en-GB'));
         finalMessage += row + "\n";
     });
@@ -638,13 +666,14 @@ async function getMessageText(selected, isSelectedOnly = true) {
 function getLegacyMessageText(selected, isSelectedOnly) {
     let text = "";
     if (!isSelectedOnly) {
+        // Full Report Format
         selected.forEach((d, idx) => {
             text += `${idx + 1}. JOB: ${d.jobNo} ━━ ${d.buyer || '-'} ━━ ${d.wo || '-'} ━━ ${(d.status || 'PENDING').toUpperCase()}${d.comments ? ` ━━ ${d.comments}` : ''}\n`;
         });
     } else {
-        text = "Dear Brother Need Some Emblishment Wo\n";
-        selected.forEach(d => {
-            text += `${d.jobNo}   ${d.buyer || ""}   ${d.wo || ""}   ${d.status || ""}   ${d.comments || ""}\n`;
+        // Message Report: Only Job Number and Buyer Name
+        selected.forEach((d, idx) => {
+            text += `${d.jobNo}   ${d.buyer || '-'}\n`;
         });
     }
     return text.trim();

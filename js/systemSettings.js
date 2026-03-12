@@ -30,7 +30,7 @@ const DEFAULT_SETTINGS = {
         activeYear: "all"
     },
     whatsapp_templates: {
-        emb_send_selected: "Dear Brother Need Some Emblishment Wo\n{jobNo}   {buyer}   {wo}   {status}   {comments}",
+        emb_send_selected: "{jobNo}   {buyer}",
         emb_full_report: "📦 EMB STATUS REPORT ({date})\n━━━━━━━━━━━━━━━━━━━━━━\n{index}. JOB: {jobNo} ━━ {buyer} ━━ {wo} ━━ {status} ━━ {comments}"
     },
     globalNotice: "Welcome to Report Erp System!"
